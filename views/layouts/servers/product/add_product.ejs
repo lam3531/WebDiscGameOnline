@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thêm sản phẩm</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Nhập sản phẩm mới</h3>
+                <div class="panel-body">
+                    <div class="position-center">
+                        <form action="/save_product" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label >Tên sản phẩm</label>
+                                <input type="text" class="form-control" name="productName" placeholder="Tên sản phẩm" required>
+                            </div>
+        
+                            <div class="form-group">
+                                <label>Hình ảnh sản phẩm</label>
+                                <input type="file" name="productImage" id="imageInput" onchange="previewImage(event)">
+                                <img id="preview" style="max-width: 200px; max-height: 200px;">
+                                <button id="removeImageButton" onclick="removeImage(event)" style="display: none; background-color: #f44336; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer;">Xoá hình ảnh</button>
+                            </div>
+        
+                            <div class="form-group">
+                                <label for="category" >Thể loại</label>
+                                <select name="categoryID" class="form-control m-bot15" id="categories" multiple>
+                                    <option value="6476b3651cde57b995f9a9ed">Hành Động</option>
+                                    <option value="645c54d3c72a21d65472d42b">Thể thao</option>
+                                    <option value="645c554c5eca5bdb84a25d09">Chiến thuật</option>
+                                    <option value="645c5a59cf52334165588922">Nhập vai</option>
+                                    <option value="645c5a60cf52334165588925">Phiêu lưu</option>
+                                    <option value="645c5a67cf52334165588928">Mô phỏng</option>
+                                </select>
+                            </div>
+        
+                            <div class="form-group">
+                                <label >Nhà sản xuất</label>
+                                <select name="producerID" class="form-control m-bot15">
+                                    <option value="645c5627e8da91e62f850537">Nintendo</option>
+                                    <option value="645c5707b102c1336cab8b5b">PS5</option>
+                                    <option value="645c59f1cf52334165588918">PS4</option>
+                                    <option value="645c5a7fcf5233416558892c">Xbox</option>
+                                </select>
+                            </div>
+        
+                            <div class="form-group">
+                                <label >Mô tả</label>
+                                <textarea id="editor" class="form-control" name="productDescription"></textarea>
+                            </div>
+        
+                            <div class="form-group">
+                                <label >Giá nhập</label>
+                                <input type="text" class="form-control" name="priceIn" placeholder="Giá nhập">
+                            </div>
+        
+                            <div class="form-group">
+                                <label >Giá bán</label>
+                                <input type="text" class="form-control" name="priceOut" placeholder="Giá bán">
+                            </div>
+        
+                            <div class="form-group">
+                                <label >Trạng thái</label>
+                                <select name="productStatus" class="form-control m-bot15">
+                                    <option value="0">Nổi bật</option>
+                                    <option value="1">Mới</option>
+                                    <option value="2">Ẩn</option>
+                                </select>
+                            </div>
+        
+                            <a href="/admin_product"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+                            <button type="submit" class="btn btn-success" name="add_product"><i class="fa-solid fa-plus"></i> Nhập SP mới</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!--main content end-->
+
+</section>
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function() {
+        const preview = document.getElementById('preview');
+        if (file) {
+            preview.src = reader.result;
+        } else {
+            preview.removeAttribute('src');
+        }
+    };
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+
+    const removeImageButton = document.getElementById('removeImageButton');
+    removeImageButton.style.display = file ? 'inline-block' : 'none';
+}
+
+function removeImage() {
+    event.preventDefault();
+    const preview = document.getElementById('preview');
+    preview.removeAttribute('src');
+
+    // Reset the input file element to clear the selection
+    const fileInput = document.getElementById('imageInput');
+    fileInput.value = '';
+
+    const removeImageButton = document.getElementById('removeImageButton');
+    removeImageButton.style.display = 'none';
+}
+</script>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

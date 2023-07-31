@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sửa thông tin nhân viên</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Sửa tài khoản của <%= nhanvat.fullname %></h3>
+                <div class="panel-body">
+                    <div class="position-center">
+                        <form action="/edit_save" method="post">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" name="id" value="<%= nhanvat._id %>">
+                            </div>
+                            <div class="form-group">
+                                <label >Tên nhân viên</label>
+                                <%if(nameError.length > 0){%><p style="font-size: 14px;color: red;"><%= nameError %></p><%}%>
+                                <%if(nameED.length > 0){%>
+                                    <input type="text" class="form-control" name="fullname" placeholder="Tên nhân viên" value="<%= nameED %>">
+                                    <%}else{%>
+                                        <input type="text" class="form-control" name="fullname" placeholder="Tên nhân viên" value="<%= nhanvat.fullname %>">
+                                        <%}%>
+                                
+                            </div>
+                            <div class="form-group">
+                                <label >Email</label>
+                                <%if(emailError.length > 0){%><p style="font-size: 14px;color: red;"><%= emailError %></p><%}%>
+                                <%if(errorEmail.length > 0){%><p style="font-size: 14px;color: red;"><%= errorEmail %></p><%}%>
+                                <%if(emailED.length > 0){%>
+                                    <input type="text" class="form-control" name="email" placeholder="Email" value="<%= emailED %>">
+                                    <%}else{%>
+                                        <input type="text" class="form-control" name="email" placeholder="Email" value="<%= nhanvat.email %>">
+                                        <%}%>
+                            </div>
+                            <div class="form-group">
+                                <label >Username</label>
+                                <%if(usernameError.length > 0){%><p style="font-size: 14px;color: red;"><%= usernameError %></p><%}%>
+                                <%if(errorUsername.length > 0){%><p style="font-size: 14px;color: red;"><%= errorUsername %></p><%}%>
+                                <%if(usernameED.length > 0){%>
+                                    <input type="text" class="form-control" name="username" placeholder="Username" value="<%= usernameED %>">
+                                    <%}else{%>
+                                        <input type="text" class="form-control" name="username" placeholder="Username" value="<%= nhanvat.username %>">
+                                        <%}%>
+                                
+                            </div>
+                            <div class="form-group">
+                                <label >Chức vụ</label>
+                                <select name="role" class="form-control m-bot15">
+                                    <% if(nhanvat.role == 0){ %>
+                                        <option selected value="0">Quản lý</option>
+                                        <option value="1">Nhân viên kho</option>
+                                        <option value="2">Nhân viên đơn hàng</option>
+                                        <option value="3">Nhân viên CSKH</option>
+                                    <% }else if(nhanvat.role == 1){ %>
+                                        <option selected value="1">Nhân viên kho</option>
+                                        <option value="0">Quản lý</option>
+                                        <option value="2">Nhân viên đơn hàng</option>
+                                        <option value="3">Nhân viên CSKH</option>   
+                                    <% }else if(nhanvat.role == 2){ %>
+                                        <option selected value="2">Nhân viên đơn hàng</option>
+                                        <option value="0">Quản lý</option>
+                                        <option value="1">Nhân viên kho</option>
+                                        <option value="3">Nhân viên CSKH</option>   
+                                    <% }else if(nhanvat.role == 3){ %>
+                                        <option selected value="3">Nhân viên CSKH</option>
+                                        <option value="0">Quản lý</option>
+                                        <option value="1">Nhân viên kho</option>
+                                        <option value="2">Nhân viên đơn hàng</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label >Trạng thái</label>
+                                <select name="status" class="form-control m-bot15">
+                                    <% if(nhanvat.status == 0){ %>
+                                        <option selected value="0">Kích hoạt</option>
+                                        <option value="1">Không kích hoạt</option>
+                                    <% }else if(nhanvat.status == 1){ %>
+                                        <option selected value="1">Không kích hoạt</option>
+                                        <option value="0">Kích hoạt</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label >Mật khẩu mới</label>
+                                <%if(passwordError.length > 0){%><p style="font-size: 14px;color: red;"><%= passwordError %></p><%}%>
+                                <%if(passwordED.length > 0){%>
+                                    <input type="password" class="form-control" name="password" placeholder="Mật khẩu mới..." value="<%= passwordED %>">
+                                    <%}else{%>
+                                        <input type="password" class="form-control" name="password" placeholder="Mật khẩu mới..." value="<%= nhanvat.password %>">
+                                        <%}%>
+                                
+                            </div>
+                            <a href="/employees"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+                            <button type="submit" class="btn btn-success">Sửa</button>
+                        </form>
+                    </div>
+        
+                </div>
+            </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

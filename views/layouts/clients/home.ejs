@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Store</title>
+    <%- include('partials/head') %>
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="container">
+        <div class="my-slide">
+            <div class="row">
+                <div class="col-9">
+                    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active" data-bs-interval="10000">
+                                <a href="/product/god-of-war"><img src="images/godOfwar.jpg" class="d-block w-100" alt="..."></a>
+                            </div>
+                            <div class="carousel-item" data-bs-interval="2000">
+                                <a href="/product/elden-ring"><img src="images/elden-ring.jpg" class="d-block w-100" alt="..."></a>
+                            </div>
+                            <div class="carousel-item">
+                                <a href="/product/fifa-23"><img src="images/fifa23.jpg" class="d-block w-100" alt="..."></a>
+                            </div>
+                            <div class="carousel-item">
+                                <a href="/product/demon's-souls"><img src="images/demons-souls.jpg" class="d-block w-100" alt="..."></a>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="col brand">
+                            <a href="/category/mo-phong">
+                                <img src="images/MoPhong.jpg">
+                            </a>
+                    </div>
+
+                    <div class="col brandd">
+                            <a href="/category/nhap-vai">
+                                <img src="images/NhapVai.jpg">
+                            </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-content1">
+                <a href="/category/hanh-dong">
+                    <img src="images/HanhDong.jpg">
+                </a>
+
+                <a href="/category/phieu-luu">
+                    <img src="images/PhieuLuu.jpg">
+                </a>
+        
+                <a href="/category/the-thao">
+                    <img src="images/TheThao.jpg">
+                </a>
+        
+                <a href="/category/chien-thuat">
+                    <img src="images/ChienThuat.jpg">
+                </a>
+        </div>
+    </div>
+
+    <div class="featured">
+        <div class="container">
+            <div class="featured-heading">
+                <h3 style="font-size: 22px;">Sản phẩm nổi bật</h3>
+                <p style="font-style: italic;font-size: 14px;">Danh sách những sản phẩm theo xu hướng mà có thể bạn sẽ thích</p>
+            </div>
+                <ul class="autoWidth" class="cs-hidden">
+                    <% for(let i=0; i < danhsach.length; i++) { %>
+                        <% if(danhsach[i].productStatus == 0){ %>
+                            <li class="item-a">
+                                <div class="featured-box">
+                                    <a href="/product/<%= danhsach[i].slug %>">
+                                        <img src="images/<%= danhsach[i].productImage %>" height="100" width="100" alt="">
+                                        <div class="p-title">
+                                            <p><%= danhsach[i].productName %></p>
+                                        </div>
+                                        <div class="price">
+                                            <p><%= VND.format(danhsach[i].priceOut) %></p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                        <% } %>    
+                    <% } %>
+                </ul>
+        </div>
+    </div>
+    <div class="favorite">
+        <div class="container">
+            <div class="favorite-heading">
+                <h3 style="font-size: 22px;">Sản phẩm Mới</h3>
+                <p style="font-style: italic;font-size: 14px;">Danh sách những sản phẩm mới mà có thể bạn sẽ thích</p>
+            </div>
+
+            <ul class="autoWidth" class="cs-hidden">
+                <% for(let i=0; i < danhsach.length; i++) { %>
+                    <% if(danhsach[i].productStatus == 1){ %>
+                <li class="item-a">
+                    <div class="featured-box">
+                        <a href="/product/<%= danhsach[i].slug %>">
+                            <img src="images/<%= danhsach[i].productImage %>" height="100" width="100" alt="">
+                            <div class="p-title">
+                                <p><%= danhsach[i].productName %></p>
+                            </div>
+                            <div class="price">
+                                <p><%= VND.format(danhsach[i].priceOut) %></p>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+                <% } %>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+
+    <div class="newss">
+        <div class="container">
+            <div class="newss-heading">
+                <h3 style="font-size: 22px;">Tin tức</h3>
+            </div>
+
+            <div class="news-container">
+                <ul class="autoWidth" class="cs-hidden">
+                    <% for(let i=0; i < tintuc.length; i++) { %>
+                    <li class="item-a">
+                        <div class="news-box">
+                            <div class="news-img">
+                                <a href="/news/<%= tintuc[i].slug %>" class="news-title"><img src="/images/<%= tintuc[i].productImage %>" alt="News"></a>
+                            </div>
+                            <div class="news-text">
+                                <span>Tạo vào: <%= tintuc[i].created_date %></span>
+                                <span>Cập nhật vào: <%= tintuc[i].updated_date %></span>
+                                <a href="/news/<%= tintuc[i].slug %>" class="news-title"><%= tintuc[i].newsTitle %></a>
+                            </div>
+                        </div> 
+                    </li>
+                    <%}%>
+                </ul>
+            </div>      
+        </div>				
+    </div>
+
+    <div class="hiring">
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                    <img src="/images/hiringg.png" alt="">
+                </div>
+                <div class="hiring-text col-9">
+                    <h2 style="margin-bottom: 15px;">Bạn muốn tham gia với chúng tôi?</h2>
+                    <p>Tham gia vào một mô hình công ty cực kỳ mới mẻ lĩnh vực GamingShop, bạn sẽ là một phần của tập thể năng động và trẻ trung. Đăng ký ngay nếu cảm thấy phù hợp ở một trong những vị trí sau</p>
+                    <a href="/signup" class="btn btn-primary hiring-btn">Đăng ký ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+     <%- include('partials/footer') %>
+</body>
+</html>

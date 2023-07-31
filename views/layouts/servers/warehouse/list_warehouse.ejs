@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dữ liệu nhập</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Kho</h3>
+                <a href="/warehouse">
+                    <button class="btn btn-primary">Kho</button>
+                </a>
+                <div class="panel panel-default">
+                    <div class="table-responsive">
+                        <table id="myTable" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center; width: 45px;">STT</th>
+                                <th style="text-align: center;">Game</th>
+                                <th style="text-align: center;">Giá nhập</th>
+                                <th style="text-align: center;">Số lượng nhập</th>
+                                <th style="text-align: center;">Tổng tiền nhập</th>
+                                <th style="text-align: center;">Người nhập</th>
+                                <th style="text-align: center;">Ngày nhập</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% for(let i=0; i < danhsach.length; i++) { %>
+                            <tr>
+                                <td style="text-align: center;"><%= i+1 %></td>
+                                <td><%= danhsach[i].productID.productName %></td>
+                                <td style="text-align: center;"><%= VND.format(danhsach[i].productID.priceIn) %></td>
+                                <td style="text-align: center;"><%= danhsach[i].quantityIn %></td>
+                                <td style="text-align: center;"><%= VND.format(danhsach[i].productID.priceIn * danhsach[i].quantityIn) %></td>
+                                <td style="text-align: center;"><%= danhsach[i].created_by.fullname %></td>
+                                <td style="text-align: center;"><%= danhsach[i].created_date %></td>
+                            </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

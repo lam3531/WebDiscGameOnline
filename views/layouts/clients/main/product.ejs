@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pname %></title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <div class="product-box">
+        <%if(success.length > 0){%>
+            <div class="alert alert-success" style="margin-top: 15px;">
+                <%= success %>
+            </div>
+            <%} else if(error.length > 0){%>
+                <div class="alert alert-danger" style="margin-top: 15px;">
+                    <%= error %>
+                </div>
+                <%}%>
+
+        <div class="p-left">
+            <div class="big-img">
+                <img src="/images/<%= danhsach.productImage %>" style="text-align: center" height="300px"
+                     width="100px" alt="">
+            </div>
+        </div>
+
+        <div class="p-right">
+            <div class="url">
+                <a href="/">Trang chủ</a> >
+                <% danhsach.categoryID.forEach(function(id){ %>
+                <a href="/category/<%= id.slug %>"><%= id.categoryName %>&nbsp;/</a>
+                <% }); %>
+            </div>
+            <%if(add.length > 0){%>
+                <p style="font-size: 14px; font-weight:600; color: green; margin: 2.5px 0px 0px 5px;"><%= add %></p>
+            
+                <div class="modal-poppup" id="pop-up">
+                    <div class="poppup-container">
+                        <img src="/images/404-tick.png" alt="">
+                        <p style="cursor:pointer; text-align: right;font-weight: bold;padding-bottom: 30px; margin-top: -30px;" onclick="del()">x</p>
+                        <h2>Thành công</h2>
+                        <p>Bạn đã thêm <b><%= pname %></b> vào giỏ hàng thành công<br> Cảm ơn bạn!</p>
+                        <a href="/"><button type="button" class="btn btn-outline-dark">Tiếp tục mua hàng!</button></a>
+                        <a href="/cart/<%= userid %>"><button type="button" class="btn btn-success">Tới giỏ hàng!</button></a>
+                    </div>
+                </div>
+            <%}%>
+            <%if(error.length > 0){%>
+                <p style="font-size: 14px; font-weight:600; color: red; margin: 2.5px 0px 0px 5px;">Thêm vào giỏ hàng không thành công!</p>
+            <%}%>
+            <div class="pname" name="name"> 
+                <%= danhsach.productName %>
+            </div>
+            
+            <div class="pstatus">
+                <p style="font-weight: bold">Tình trạng: &nbsp</p>
+                    <% if(danhsach.productQuantity <= 0 ){ %>
+                    <p>Hết Hàng</p>
+                    <% }else{ %>
+                    <p>Còn Hàng</p>
+                    <% } %>
+            </div>
+            <div class="pid">
+                <p style="font-weight: bold">Số lượng: &nbsp</p>
+                <p><%= danhsach.productQuantity %></p>
+            </div>
+            <div class="pcategory">
+                <p style="font-weight: bold">Thể loại: &nbsp</p>
+                <% danhsach.categoryID.forEach(function(id){ %>
+                <a style="text-decoration: none; color: black;" href="/category/<%= id.slug %>"><p><%= id.categoryName %>&nbsp;</p></a>
+                <% }); %>
+            </div>
+            <div class="pproducer">
+                <p style="font-weight: bold">Nhà sản xuất: &nbsp</p>
+                <a style="text-decoration: none; color: black;" href="/producer/<%= danhsach.producerID.slug %>"><p><%= danhsach.producerID.producerName %>&nbsp;</p></a>
+            </div>
+            <div class="p-price" name="price">
+                <%= VND.format(danhsach.priceOut) %>
+                </div>
+
+            <% if(danhsach.productQuantity!=0){ %>
+            <form action="/add_to_cart" method="post" id="cartForm">
+            <div class="quantity">
+                    <p>Số lượng :</p>
+                    <input form="cartForm" name="quantity" type="number" min="1" max="<%= danhsach.productQuantity %>" value="1" required="">
+                    <input form="cartForm" name="product_id_hidden" type="hidden" value="<%= danhsach._id %>">
+                    <input form="cartForm" name="username" type="hidden" class="form-control" value="0">
+                    <input form="cartForm" name="user_id_hidden" type="hidden" value="<%= userid %>">
+                </div>
+                
+                <div class="btn-box">
+                    <% if(fullname==1){ %>
+                        <button type="text" class="cart-btn"><a href="/login" style="text-decoration: none; color:white"><i class="fa-solid fa-cart-plus"></i> Thêm vào Giỏ</a></button>
+                    <% }else{ %>
+                        <button form="cartForm" type="submit" class="cart-btn"><i class="fa-solid fa-cart-plus"></i> Thêm vào Giỏ</button>
+                    <% } %>
+                </div>
+            </div>
+            
+            </form>
+            <% }else{ %>
+                <p class="btn btn-outline-success" style="margin-top: 10px; font-size: 18px;">Liên hệ shop để đặt hàng</p>
+            <%}%>                
+        </div>
+    </div>
+
+    <div class="description">
+        <div class="row">
+            <div class="col-4 p-title">
+                <h3>Chi tiết sản phẩm</h3>
+            </div>
+
+            <div class="col-8 p-info" style="max-width: 800px; margin-top: 5px; line-height: 25px;">
+                <%- danhsach.productDescription %>
+            </div>
+        </div>
+    </div>
+            <div class="container">
+                <div class="comment">
+                    <h3>Bình luận</h3>
+                    <% if(random!=0){ %>
+                    <form action="/comment" method="post" id="commentForm">
+                        <input form="commentForm" name="productID" type="hidden" class="form-control" value="<%= danhsach._id  %>">
+                        <input form="commentForm" name="userID" type="hidden" class="form-control" value="<%= userid  %>">
+                        <input name="username" type="hidden" class="form-control" value="0">
+                        <textarea form="commentForm" name="commentInfo" class="comment_info" placeholder="Nhập nội dung bình luận"></textarea>
+                        <button form="commentForm" type="submit" class="send-comment"><i class="fa-solid fa-location-arrow"></i> Gửi bình luận
+                        </button>
+                    </form>
+                    <%}else if(fullname==1){%>
+                    <div class="noti-comment">
+                        <p>Vui lòng đăng nhập để bình luận</p>
+                    </div>
+                    <%} else {%>
+                        <div class="noti-comment">
+                            <p>Vui lòng mua sản phẩm để bình luận</p>
+                        </div>
+                    <% } %>
+                    <% for(let i=0; i < comments.length; i++) { %>
+                        <% if(comments[i].commentStatus == 1){ %>
+                    <div class="row style_comment" style="margin-top: 30px;">
+                        <div class="col-md-2" style="padding-bottom: 10px;">
+                            <% if(!comments[i].userID.avatar){ %>
+                                <img style="width: 80px;" src="/images/avataricon.png">
+                                <%}else{%>
+                                    <img style="width: 80px; border-radius: 50%;" src="/avatars/<%= comments[i].userID.avatar %>">
+                                    <%}%>
+                        </div>
+                        <div class="col-md-10" style="margin-left: -100px;">
+                            <p style="line-height: 0.2;"><b><%= comments[i].userID.fullname %></b></p>
+                            <p style="color: #6B7684;">Bình luận vào lúc: <%= comments[i].commentDate %></p>
+                            <p style="line-height: 0.2;"><%= comments[i].commentInfo %></p>
+                        </div>
+                    </div>
+                        <%}%>
+                    <% } %> 
+                </div>
+            </div>
+            <script>
+                function del() {
+                  const popup = document.getElementById("pop-up");
+                  popup.style.display = "none";
+                }
+                </script>
+<%- include('../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    
+    <div class="container">
+        <div class="my-login">
+            <div class="login-heading">
+                <h3 style="text-align: center;">Đăng nhập</h3>
+            </div>  
+            <form action="/login" method="post">
+                <div class="form-login">
+                    <div class="spann" style="display: flex;">
+                        <span>Email</span>
+                        <%if (error.length > 0){ %>
+                            <p style="font-size: 14px;font-weight:600; color: red; margin: 12.5px 0px 0px 5px;"><%= error %> </p>
+                        <%}%>
+                    </div>
+                    <input type="text" name="email" class="box" placeholder="Email" value="<%= errorEmail %>">
+                    <div class="spann" style="display: flex;">
+                        <span>Mật khẩu</span>
+                        <%if (errorPassword.length > 0){ %>
+                            <p style="font-size: 14px;font-weight:600; color: red; margin: 12.5px 0px 0px 5px;"><%= errorPassword %></p>
+                        <%}%>
+                    </div>
+                <input type="password" name="password" class="box box-input" placeholder="Mật khẩu">
+                <i class="fa-regular fa-eye-slash eye eye-close"></i>
+                <i class="fa-regular fa-eye eye eye-open hidden"></i>
+                <!-- <div class="checkbox">
+                    <input type="checkbox" name="" id="remember-me">
+                    <label for="remember-me">Ghi nhớ tài khoản</label>
+                </div> -->
+                <input type="submit" value="Đăng nhập" class="btn">
+                <p>Quên mật khẩu ? <a href="/forget">Ấn tại đây</a></p>
+                <p>Bạn chưa có tài khoản ?&nbsp;<a href="/signup">Tạo tài khoản</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+     <%- include('../partials/footer') %>
+</body>
+
+<script type="text/javascript">
+    const input = document.querySelector(".box-input");
+    const eyeOpen = document.querySelector(".eye-open");
+    const eyeClose = document.querySelector(".eye-close");
+
+    eyeOpen.addEventListener("click", function(){
+        eyeOpen.classList.add("hidden");
+        eyeClose.classList.remove("hidden");
+        input.setAttribute("type","password");
+    })
+
+    eyeClose.addEventListener("click", function(){
+        eyeOpen.classList.remove("hidden");
+        eyeClose.classList.add("hidden");
+        input.setAttribute("type","text");
+    })
+
+</script>
+
+</html>

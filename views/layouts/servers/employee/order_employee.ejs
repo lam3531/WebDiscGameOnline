@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Danh sách nhân viên đơn hàng</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Danh sách nhân viên đơn hàng</h3>
+                <a href="/add_employee">
+                    <button class="btn btn-primary"><i class="fa-solid fa-plus"></i>Thêm nhân viên</button>
+                </a>
+                <div class="panel panel-default">
+                    <div class="table-responsive" style="margin-top: 15px;">
+                        <table style="text-align: center; border-right: 1px solid #DDD;" class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="display: none;"></th>
+                                <th style="width: 30px; text-align: center;">STT</th>
+                                <th style="text-align: center;">Tên nhân viên</th>
+                                <th style="text-align: center;">Email</th>
+                                <th style="text-align: center;">Chức vụ</th>
+                                <th style="text-align: center;">Trạng thái</th>
+                                <th style="text-align: center;">Tùy biến</th>
+                            </tr>
+                            </thead>
+                                <tbody>
+                                    <% for(let i=0; i < nhanvat.length; i++) { %>
+                                <tr>
+                                    <td style="display: none;"><%= nhanvat[i]._id %></td>
+                                    <td style="height: 76px;"><%= i+1 %></td>
+                                    <td><%= nhanvat[i].fullname %></td>
+                                    <td><%= nhanvat[i].email %></td>
+                                    <td><% if(nhanvat[i].role == 0){ %> Quản lý <% }else
+                                        if(nhanvat[i].role == 1){ %> Nhân viên kho <% }else if(nhanvat[i].role ==
+                                        2){ %> Nhân viên đơn hàng <% }else if(nhanvat[i].role == 3){ %> Nhân viên CSKH <% } %></td>
+                                    <td>
+                                        <% if(nhanvat[i].status == 0){ %> Kích hoạt <% }else
+                                        if(nhanvat[i].status == 1){ %> Không kích hoạt <% } %>
+                                    </td> 
+                                    <td>
+                                        <a href="/edit/<%= nhanvat[i].id %>" class="my_linkss" style="margin-right: 8px;">
+                                            <i class="fa-solid fa-square-pen" style="font-size: 25px; color: #5CB85C;"></i>
+                                        </a>
+                                        <a onClick="find(this);" class="js-buy-tickets my_linkss"><i class="fa-solid fa-square-xmark js-buy-tickets" style="font-size: 25px; color: #D9534F;"></i></a>
+                                    </td>
+                                </tr>
+
+                                <div class="modal js-modal">
+                                    <div class="modal-container js-modal-container">
+                                        
+                                        <header class="modal-header">
+                                            Xóa nhân viên!
+                                        </header>
+                              
+                                        <div class="modal-body">
+                                            <label for="tickets-quantity" class="modal-label">
+                                                Bạn có muốn xóa nhân viên này?
+                                            </label>
+                                            <div class="btn-js" style="margin-top:50px; margin-left:200px;">
+                                                <a id="buy-tickets" style="margin-right:15px; background-color: #DC3545;"> Xóa </a>
+                                                <a id="buy-tickets" class="modal-close js-modal-close" style="background-color: #6C757D;"> Hủy </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <script>
+    function find( element ) {
+        let link = element.parentNode.parentNode.cells[0].innerHTML;
+        document.getElementById("buy-tickets").href = "/delete_categories/"+link;
+    }
+    </script>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tất cả các sản phẩm</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    
+    <div class="container">
+        <div class="cart-p">
+            <div class="cart-heading">
+                    <h3>Tất cả các sản phẩm</h3>
+            </div>
+            <div class="filter-catergory">
+                <p>Lọc sản phẩm theo: </p>
+                <div class="by-price">
+                    <label for=""><b>Giá tiền</b></label>
+                    <select class="select-price" id="selectPrice" onchange="sortingValue()">
+                        <option value="Default">Mặc định</option>
+                        <option value="LowToHigh">Tăng dần</option>
+                        <option value="HighToLow">Giảm dần</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <p id="test" style="display: none;"><%= data %></p>
+        <p style="display: none;" id="length"><%= data.length %></p>
+        <div class="product-grid row row-cols-4"></div>
+        <div class="pagination">
+            <button class="prev" style="position: relative;
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+            display: block;
+            color: #0d6efd;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.025rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            cursor: pointer;">Prev</button>
+            <button class="next" style="position: relative;
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+            display: block;
+            color: #0d6efd;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.025rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            cursor: pointer;">Next</button>
+        </div>
+    </div>
+    <script>
+const VND = new Intl.NumberFormat("vi-VN", {
+  style: "currency",
+  currency: "VND",
+});
+const value = document.getElementById("test").innerHTML;
+const productStrings = value.replace(/'/g, "\"").replace(/(\w+)\s*:/g, "\"$1\":");
+const jsonProducts = `[${productStrings}]`;
+const products = JSON.parse(jsonProducts);
+
+const productsPerPage = 12;
+let currentPage = 1; // trang hiện tại
+
+// tính toán số lượng trang cần thiết
+const totalPages = Math.ceil(products.length / productsPerPage);
+
+// hiển thị sản phẩm trên trang hiện tại
+function displayProductsOnCurrentPage(sortedProducts = products) {
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const productsOnCurrentPage = sortedProducts.slice(startIndex, endIndex);
+
+  const productGrid = document.querySelector('.product-grid');
+  productGrid.innerHTML = ''; // xóa bỏ các sản phẩm cũ
+
+  // hiển thị sản phẩm mới
+  productsOnCurrentPage.forEach((product) => {
+    const productItem = document.createElement('div');
+    productItem.classList.add('col', 'mb-4', 'col-product');
+    productItem.setAttribute('data-price', product.priceOut);
+    productItem.innerHTML = `
+      <div class="col product">
+        <div class="sp-box">
+        <a href="/product/${product.slug}">
+          <img src="images/${product.productImage}" class="card-img-top" alt="">
+          <div class="p-title">
+            <p>${product.productName}</p>
+          </div>
+          <div class="price">
+            <p id="price">${VND.format(product.priceOut)}</p>
+          </div>
+        </a>
+        </div>
+      </div>
+    `;
+    productGrid.appendChild(productItem);
+  });
+
+  // sử dụng flex-wrap để wrap các sản phẩm thành từng dòng mới
+  productGrid.style.display = 'flex';
+  productGrid.style.flexWrap = 'wrap';
+}
+
+// xử lý sự kiện khi người dùng chuyển sang trang khác
+function handlePageChange(page) {
+  currentPage = page;
+  displayProductsOnCurrentPage();
+}
+
+// hiển thị các nút phân trang
+function displayPaginationButtons() {
+  const pagination = document.querySelector('.pagination');
+  const prevButton = pagination.querySelector('.prev');
+  const nextButton = pagination.querySelector('.next');
+
+  // xử lý sự kiện khi nhấn nút Prev
+  prevButton.addEventListener('click', () => {
+    if (currentPage > 1) {
+      handlePageChange(currentPage - 1);
+    }
+  });
+
+  // xử lý sự kiện khi nhấn nút Next
+  nextButton.addEventListener('click', () => {
+    if (currentPage <totalPages) {
+      handlePageChange(currentPage + 1);
+    }
+  });
+}
+
+// sắp xếp sản phẩm theo giá tiền
+function sortingValue() {
+  const selectedOption = document.getElementById('selectPrice').value;
+  let sortedProducts;
+
+  if (selectedOption === 'LowToHigh') {
+    sortedProducts = products.sort((a, b) => a.priceOut - b.priceOut);
+  } else if (selectedOption === 'HighToLow') {
+    sortedProducts = products.sort((a, b) => b.priceOut - a.priceOut);
+  } else {
+    sortedProducts = products.sort((a, b) => a.productName.localeCompare(b.productName));
+  }
+
+  currentPage = 1;
+  displayProductsOnCurrentPage(sortedProducts);
+}
+
+// khởi tạo trang đầu tiên và hiển thị sản phẩm
+displayProductsOnCurrentPage();
+
+// hiển thị nút phân trang
+displayPaginationButtons();
+
+// sắp xếp sản phẩm theo giá tiền khi trang được load
+window.onload = function () {
+  sortingValue();
+}
+    </script>
+     <%- include('../partials/footer') %>
+</body>
+</html>

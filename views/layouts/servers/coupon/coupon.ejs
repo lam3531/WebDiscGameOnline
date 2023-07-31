@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mã giảm giá</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Danh sách mã giảm giá</h3>
+                <%if(success.length > 0){%>
+                    <div class="alert alert-success">
+                        <%= success %>
+                    </div>
+                    <%} else if(error.length > 0){%>
+                        <div class="alert alert-danger">
+                            <%= error %>
+                        </div>
+                        <%}%>
+                <a href="/add_coupon">
+                    <button class="btn btn-primary"><i class="fa-solid fa-plus"></i>  Thêm mã giảm giá</button>
+                </a>
+                <div class="panel panel-default">
+                    <div class="table-responsive" style="text-align: center; overflow-y: hidden;">
+                        <table class="table table-bordered">
+                            <thead >
+                            <tr>
+                                <th style="width: 50px; text-align: center;">STT</th>
+                                <th  style="text-align: center;">Mã giảm giá</th>
+                                <th  style="text-align: center;">Số lượng</th>
+                                <th  style="text-align: center;">Loại</th>
+                                <th  style="text-align: center;">Giá trị</th>
+                                <th  style="text-align: center;">Trạng thái</th>
+                                <th  style="text-align: center;">Ngày bắt đầu</th>
+                                <th  style="text-align: center;">Ngày kết thúc</th>
+                                <th  style="text-align: center;">Tùy biến</th>
+                            </tr>
+                            </thead>
+                                <tbody>
+                                <% for(let i=0; i < danhsach.length; i++) { %>
+                                <tr>
+                                    <td style="height: 76px;"><%= i+1 %></td>
+                                    <td><%= danhsach[i].couponCode %></td>
+                                    <td><%= danhsach[i].couponQuantity %></td>
+                                    <td><% if(danhsach[i].couponType == 0){ %> Giảm tiền <% }else
+                                        if(danhsach[i].couponType == 1){ %> Giảm phần trăm <% } %></td>
+                                    <td><% if(danhsach[i].couponType == 0){ %> <%= VND.format(danhsach[i].couponValue*1000) %> <% }else
+                                        if(danhsach[i].couponType == 1){ %> <%= danhsach[i].couponValue %>% <% } %></td>
+                                    <td><% if(danhsach[i].couponStatus == 0){ %> Hoạt động <% }else
+                                        if(danhsach[i].couponStatus == 1){ %> Ngừng hoạt động <% } %></td>
+                                    <td><%= danhsach[i].start_date %></td>
+                                    <td><%= danhsach[i].end_date %></td>
+                                    <td>
+                                        <a href="/edit_coupon/<%= danhsach[i].slug %>" class="my_link" ui-toggle-class="">
+                                            <i class="fa-solid fa-square-pen" style="font-size: 25px; color: #5CB85C;"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% } %>
+                                </tbody>
+                        </table>
+                    </div>
+            </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Doanh thu năm</title>
+    <%- include('../partials/head') %>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@^3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
+  </head>
+  <body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="table-agile-info">
+          <h3>
+            Doanh thu năm 2023
+          </h3>
+          <p id="monthlyData" style="display: none;"><%= monthlyData %></p>
+          <p id="monthlyDataIn" style="display: none;"><%= monthlyDataIn %></p>
+          <p id="monthlyDataOut" style="display: none;"><%= monthlyDataOut %></p>
+          
+          <div class="sale-monthly">
+            <p>Xem doanh thu theo tháng: </p>
+            <div class="by-monthly">
+              <select class="select-monthly" id="value" onchange="func()">
+                <option disabled selected hidden>Chọn tháng</option>
+                <% for (var i = 0; i < 12; i++){ %>
+                  <option value="<%= i %>">Tháng <%= i+1 %></option>
+                <% } %>
+              </select>
+              <a href="/salesbyyears" id="link" style="margin-left: 5px;"><button class="btn btn-primary">Xem</button></a>
+            </div>
+          </div>
+  
+          <div class="chartCard">
+            <div class="chartBox">
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+    <script>
+      function func() {
+        var month = document.getElementById("value").value;
+        document.getElementById("link").href = "/monthlySale/"+month;
+      }
+    </script>
+    <script>
+      const valueIn = document.getElementById("monthlyDataIn").innerHTML;
+      const monthlyDataIn = valueIn.split(",");
+      const [var1In, var2In, var3In, var4In, var5In, var6In, var7In, var8In, var9In, var10In, var11In, var12In] = monthlyDataIn;
+
+      const valueOut = document.getElementById("monthlyDataOut").innerHTML;
+      const monthlyDataOut = valueOut.split(",");
+      const [var1Out, var2Out, var3Out, var4Out, var5Out, var6Out, var7Out, var8Out, var9Out, var10Out, var11Out, var12Out] = monthlyDataOut;
+
+      const value = document.getElementById("monthlyData").innerHTML;
+      const monthlyData = value.split(",");
+      const [var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12] = monthlyData;
+
+      var startOfYear = moment().month(0);
+      var endOfYear = moment().month(11);
+      var months = [];
+      var month = startOfYear;
+
+      while (month <= endOfYear) {
+        months.push(month.format("YYYY-MM"));
+        month = month.clone().add(1, "M");
+      }
+      const data = {
+        labels: months,
+        datasets: [
+          {
+            label: "Tiền nhập",
+            data: [var1In, var2In, var3In, var4In, var5In, var6In, var7In, var8In, var9In, var10In, var11In, var12In],
+            backgroundColor: "rgb(255, 99, 132)",
+            borderColor: "rgba( 255, 182, 193, 1 )",
+            borderWidth: 1,
+          },
+          {
+            label: "Tiền bán",
+            data: [var1Out, var2Out, var3Out, var4Out, var5Out, var6Out, var7Out, var8Out, var9Out, var10Out, var11Out, var12Out],
+            backgroundColor: "rgba(255, 205, 86, 1)",
+            borderColor: "rgb(255, 205, 86)",
+            borderWidth: 1,
+          },
+          {
+            label: "Doanh thu",
+            data: [var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12],
+            backgroundColor: "rgba(54, 162, 235, 1)",
+            borderColor: "rgb(54, 162, 235)",
+            borderWidth: 1,
+          },
+        ],
+      };
+      // config
+      const config = {
+        type: "bar",
+        data,
+        options: {
+          scales: {
+            x: {
+              type: "time",
+              time: {
+                unit: "month",
+                displayFormats: {
+                  month: "M"
+                }
+              },
+            },
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      };
+      // render init block
+      const myChart = new Chart(document.getElementById("myChart"), config);
+      // Instantly assign Chart.js version
+      const chartVersion = document.getElementById("chartVersion");
+      chartVersion.innerText = Chart.version;
+  </script>
+    <!--main content end-->
+    <%- include('../partials/footer') %>
+  </body>
+
+  <!-- Filter date -->
+</html>

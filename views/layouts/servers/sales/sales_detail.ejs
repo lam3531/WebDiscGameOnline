@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chi tiết</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Chi tiết </h3>
+                <div class="info-orders">
+                    <p><b>Mã đơn hàng:</b> <%= danhsach.orderCode %> </p>
+                    <p><b>Hình thức thanh toán:</b> <%= danhsach.paymentMethod %> </p>
+                    <p><b>Ngày đặt:</b> <%= danhsach.timeIn %> </p>
+                    <p><b>Ngày nhận: </b><%= danhsach.timeOut %></p>
+                    <p><b>Mã giảm giá: </b><%= danhsach.couponCode %></p>
+                    <p><b>Tình trạng:</b> Đã nhận hàng</p>
+                    <input type="hidden" name="time" value="<%= danhsach.day %>">
+                </div>
+                <div class="table-responsive" style="margin-top: 15px;">
+                    <table class="table table-bordered" style="text-align: center;">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;">Tên sản phẩm</th>
+                            <th style="text-align: center;">Giá tiền</th>
+                            <th style="text-align: center;">Số lượng</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <% danhsach.items.forEach(function(id) { %>
+                            <tr>
+                                <td><%= id.productID.productName %></td>
+                                <td><%= VND.format(id.productID.priceOut) %></td>
+                                <td><%= id.quantity %></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                    <div class="cart-price">
+                        <table>
+                            <tr>
+                                <td style="font-weight: bold;">Tổng giá sản phẩm:</td>
+                                <td style="text-align: right;">&nbsp;<%= VND.format(money) %></td>
+                            </tr>                
+                            <tr>
+                                <td style="font-weight: bold;">Phí vận chuyển:</td>
+                                <td style="text-align: right;"><%= VND.format(danhsach.shippingFee) %></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Giảm giá:</td>
+                                <td style="text-align: right;"><%if(couponType==0){%>
+                                    <%= VND.format(couponValue*1000) %>
+                                    <%}else if(couponType==1){%>
+                                        <%= couponValue %>%
+                                        <%}%></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Tổng thành tiền:</td>
+                                <td style="text-align: right;">&nbsp;<%= VND.format(danhsach.total) %></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <a href="/monthlySale/<%= danhsach.month %>">
+                        <button type="button" class="btn btn-info"><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button>
+                    </a>
+                </div>
+            </div>
+        </section>
+    <!--main content end-->
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

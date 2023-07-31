@@ -1,0 +1,188 @@
+<footer id="footer">
+  <div class="container">
+    <div class="my-footer">
+      <div class="row">
+        <div class="col">
+          <h5>Giới Thiệu</h5>
+          <a href="/about"><p>Thông tin về Gaming store</p></a>
+          <a href="/terms_of_service"><p>Điều khoản dịch vụ</p></a>
+          <a href="/privacy_policy"><p>Chính sách bảo mật</p></a>
+        </div>
+
+        <div class="col">
+          <h5>Tài Khoản</h5>
+          <a href="/login"><p>Đăng Nhập</p></a>
+          <a href="/signup"><p>Đăng Ký</p></a>
+        </div>
+
+        <div class="col">
+          <h5>Liên hệ</h5>
+          <p>Hotline <b style="color: red; font-size: 14px;">0112233445</b></p> 
+          <a href="/support"><p>Hỗ trợ</p></a>
+        </div>
+
+        <div class="col">
+          <img src="/images/copyright.png" alt="UserImage" />
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/js/lightslider.min.js"
+  integrity="sha512-Gfrxsz93rxFuB7KSYlln3wFqBaXUc1jtt3dGCp+2jTb563qYvnUBM/GP2ZUtRC27STN/zUamFtVFAIsRFoT6/w=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script src="js/alert.js"></script>
+<script src="js/multi-select-tag.js"></script>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+  new MultiSelectTag("categories", {
+    // id
+    rounded: true,
+    shadow: true,
+  });
+</script>
+
+<script>
+  const buyBtns = document.querySelectorAll(".js-buy-tickets");
+  const modal = document.querySelector(".js-modal");
+  const modalContainer = document.querySelector(".js-modal-container");
+  const modalClose = document.querySelector(".js-modal-close");
+  const modalClosee = document.querySelector(".js-cancel");
+
+  // Hàm hiển thị modal xóa sp (thêm class open vào modal)
+  function find( element ) {
+    let link = element.parentNode.parentNode.cells[0].innerHTML;
+    document.getElementById("buy-tickets").href = "/delete_cart_items/"+link;
+  }
+  function showBuyTickets() {
+    modal.classList.add("open");
+  }
+
+  // Hàm ẩn modal xóa sp (fỡ bỏ class open vào modal)
+  function hideBuyTickets() {
+    modal.classList.remove("open");
+  }
+
+  //Lặp qua từng thẻ button và nghe hành vi click
+  for (const buyBtn of buyBtns) {
+    buyBtn.addEventListener("click", showBuyTickets);
+  }
+
+  // Nghe hành vi click vào button close
+  modalClose.addEventListener("click", hideBuyTickets);
+
+  modalClosee.addEventListener("click", hideBuyTickets);
+
+  modal.addEventListener("click", hideBuyTickets);
+
+  modalContainer.addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#news-slider").owlCarousel({
+      items: 3,
+      navigation: true,
+      navigationText: ["", ""],
+      autoPlay: true,
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $(".autoWidth").lightSlider({
+      autoWidth: true,
+      loop: true,
+      onSliderLoad: function () {
+        $(".autoWidth").removeClass("cS-hidden");
+      },
+    });
+  });
+
+  let subMenu = document.getElementById("subMenu");
+
+  function toggleMenu() {
+    subMenu.classList.toggle("open-menu");
+  }
+
+  let popup = document.getElementById("popup");
+
+  function openPopup() {
+    popup.classList.add("open-popup");
+  }
+  function closePopup() {
+    popup.classList.remove("open-popup");
+  }
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    load_comment();
+
+    function load_comment() {
+      var game_id = $(".game_id").val();
+      var _token = $('input[name="_token"]').val();
+      $.ajax({
+        url: "{{url('/load-comment')}}",
+        method: "POST",
+        data: { game_id: game_id, _token: _token },
+        success: function (data) {
+          $("#comment_show").html(data);
+        },
+      });
+    }
+
+    $(".send-comment").click(function () {
+      var game_id = $(".game_id").val();
+      var comment_info = $(".comment_info").val();
+      var _token = $('input[name="_token"]').val();
+      $.ajax({
+        url: "{{url('/send-comment')}}",
+        method: "POST",
+        data: { game_id: game_id, comment_info: comment_info, _token: _token },
+        success: function (data) {
+          $("#notify_comment").html(
+            '<p class="text text-success">Thêm bình luận thành công, Bình luận đang chờ duyệt</p>'
+          );
+          load_comment();
+          $("notify_comment").fadeOut(9000);
+          $(".comment_info").val("");
+        },
+      });
+    });
+
+    $(".cart-btn").click(function () {
+      $(".alert").removeClass("hide");
+      $(".alert").addClass("show");
+      $(".alert").addClass("showAlert");
+      setTimeout(function () {
+        $(".alert").addClass("hide");
+        $(".alert").removeClass("show");
+      }, 5000);
+    });
+    $(".close-btnn").click(function () {
+      $(".alert").addClass("hide");
+      $(".alert").removeClass("show");
+    });
+  });
+</script>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giỏ hàng</title>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+
+    <div class="container">
+      <div class="cartt">
+        <div class="cart-heading">
+          <img
+            style="margin-top: 25px; margin-right: 10px; width: 25px; height: 25px;" src="/images/carttt.png" alt="" />
+          <h3 style="margin-top: 18px;">Giỏ hàng</h3>
+        </div>
+        <%if(!carti[0]){%>
+          <div class="cart-table">
+            <p style="margin-top: 18px; font-size: 18px; font-weight:500">Giỏ hàng của bạn đang trống!!</p>
+          </div>
+
+          <div class="container" style="display:flex; justify-content:center;">
+            <div class="cart-table-img">
+              <img src="/images/empty-cart.png" style="width: 280px;" alt="">
+            </div>
+          </div>
+
+          <div class="container" style="display:flex; justify-content:center;">
+            <div class="back-home" style="width: 300px;">
+              <a href="/">
+                  <button class="btn btn-outline-dark btn-back-home">TIẾP TỤC MUA HÀNG</button>
+              </a>
+            </div>
+          </div>
+        <%}else{%>
+          <div class="cart-table">
+              <table id="table" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                      <th style="display: none;"></th>
+                      <th>Hình ảnh</th>
+                      <th>Tên sản phẩm</th>
+                      <th style="border-right:none;">Đơn giá</th>
+                      <th>Số lượng</th>
+                      <th>Thành tiền</th>
+                      <th>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(let i=0; i < danhsach.length; i++) { %> <%
+                    danhsach[i].items.forEach(function(pid) { %>
+                  <tr>
+                    <td style="display: none;"><%= pid.productID._id %></td>
+                    <td style="width: 155px;">
+                      <img
+                        style="width: 60px; height: 80px;"
+                        src="/images/<%= pid.productID.productImage %>"
+                        alt=""
+                      />
+                    </td>
+                    <td style="width: 320px;">
+                      <a href="/product/<%= pid.productID.slug %>" style="text-decoration: none; color: #000;"><p style="line-height: 30px"><%= pid.productID.productName %></p></a>
+                    </td>
+                    <td style="width: 125px">
+                      <p style="color: #dc4e45"><%= VND.format(pid.productID.priceOut) %> </p>
+                      <input type="hidden" value="<%= pid.productID.priceOut %>">
+                    </td>
+                    <td style="width: 120px; height: 96.75px;">
+                      <input form="form" name="product_id_hidden" type="hidden" value="<%= pid._id %>"/>
+                      <input form="form" type="number" id="quantity" min="0" max="<%= pid.productID.productQuantity %>" onchange="myFunction(event)" value="<%= pid.quantity %>" name="quantity" style="width: 45px; height: 30px; padding-left: 10px"/>
+                    </td>
+                    <td style="width: 125px;">
+                      <p style="color: #dc4e45"><%= VND.format(pid.productID.priceOut * parseInt(pid.quantity)) %></p>
+                    </td>
+                    <td style="width: 200px;">
+                      <button type="button" onClick="find(this);" class="btn btn-danger js-buy-tickets"><i class="fa-regular fa-trash-can" style="color: white;"></i> Xóa sản phẩm</button>
+                    </td>
+                    <div class="modal js-modal">
+                      <div class="modal-container js-modal-container">
+                          
+                          <header class="modal-header">
+                              Xóa sản phẩm!
+                          </header>
+                
+                          <div class="modal-body">
+                              <label for="tickets-quantity" class="modal-label">
+                                  Quý khách có muốn xóa sản phẩm này?
+                              </label>
+                              <div class="btn-js" style="margin-top:50px; margin-left:200px;">
+                                  <a href="/delete_cart_items/www" id="buy-tickets" style="margin-right:15px; background-color: #DC3545;"> Xóa </a>
+                                  <a id="buy-tickets" class="modal-close js-modal-close" style="background-color: #6C757D;"> Hủy </a>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </tr>
+                  <% }); %> <% } %>
+                </tbody>
+              </table>
+            </div>
+          <div class="row">
+            <div class="col-8"></div>
+            <div class="col-4">
+                <div class="cart-price">
+                  <div style="border: white;">
+                    <div style="display: flex;font-weight: 500;">
+                      <p>Tạm tính:</p>
+                      <p style="color:#DC3545; margin-left: 8px;"><%= VND.format(money) %></p>
+                    </div>
+                    
+                    <div class="update-cart" style="visibility:hidden; z-index: 1;" id="update">
+                      <form action="/update_quantity_cart" method="post" id="form">
+                        <button type="submit" name="update_quantity" class="btn btn-primary update-quantity btn-updatee">CẬP NHẬT GIỎ HÀNG</button>
+                      </form>
+                    </div>
+                    <div class="div" style="margin-top: -55px;">
+                      <div class="pay" id="checkout" style="   position: relative;
+                      z-index: 2; margin-top: 20px;">
+                      <a href="/checkout/<%= userid %>">
+                          <button class="btn btn-outline-success btn-pay">THANH TOÁN</button>
+                      </a>
+                      </div>
+                      <div class="back-home">
+                          <a href="/">
+                              <button class="btn btn-outline-dark btn-back-home">TIẾP TỤC MUA HÀNG</button>
+                          </a>
+                      </div>
+                    </div>  
+                </div>
+            </div>
+          </div>
+        <%}%> 
+      </div>
+    </div>
+<script>
+const VND = new Intl.NumberFormat("vi-VN", {
+  style: "currency",
+  currency: "VND",
+});
+function myFunction(event) {
+  var table = document.getElementById('table');
+  var rowIndex = event.target.closest('tr').rowIndex;
+  var price = table.rows[rowIndex].cells[3].querySelector('input[type="hidden"]').value;
+  var input = table.rows[rowIndex].cells[4].querySelector('input[type="number"]').value;
+  var max = table.rows[rowIndex].cells[4].querySelector('input[type="number"]').max; 
+  var total = table.rows[rowIndex].cells[5].querySelector('p');
+  var checkout = document.getElementById("checkout");
+  var update = document.getElementById("update");
+  checkout.style.visibility = "hidden";
+  update.style.visibility = "visible";
+  checkout.style.margin = "10px";
+}
+</script>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

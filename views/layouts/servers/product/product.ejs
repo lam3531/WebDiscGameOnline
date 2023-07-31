@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Danh sách sản phẩm</title>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="table-agile-info">
+          <h3>Danh sách Sản phẩm</h3>
+          <%if(success.length > 0){%>
+            <div class="alert alert-success">
+                <%= success %>
+            </div>
+            <%} else if(error.length > 0){%>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+                <%}%>
+          <a href="/add_product"><button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nhập 1 sản phẩm mới</button></a>
+          <div class="panel panel-default">
+            <div class="table-responsive">
+              <table id="myTable" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th class="no-sort" style="width: 30px; text-align: center;">STT</th>
+                    <th style="text-align: center; width: 240px" data-orderable="false">
+                      Tên sản phẩm
+                    </th>
+                    <th style="text-align: center; width: 20px" data-orderable="false">Hình ảnh</th>
+                    <th style="text-align: center; width: 190px" data-orderable="false">Thể loại</th>
+                    <th style="text-align: center; width: 200px" data-orderable="false">Nhà sản xuất</th>
+                    <th style="text-align: center; width: 150px" data-orderable="false">Giá nhập</th>
+                    <th style="text-align: center; width: 150px" data-orderable="false">Giá bán</th>
+                    <th style="text-align: center; width: 180px" data-orderable="false">Trạng thái</th>
+                    <th style="text-align: center; width: 170px" data-orderable="false">Tùy biến</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(let i=0; i < danhsach.length; i++) { %>
+                  <tr>
+                    <td style="text-align: center"><%= i+1 %></td>
+                    <td><%= danhsach[i].productName %></td>
+                    <td>
+                      <img
+                        src="/images/<%= danhsach[i].productImage %>"
+                        width="80"
+                        height="80"
+                        alt=""
+                      />
+                    </td>
+                    <td>
+                    <% danhsach[i].categoryID.forEach(function(id) { %>
+                      <%= id.categoryName %> <br>
+                      <% }); %>
+                    </td>
+                    <td style="text-align: center"><%= danhsach[i].producerID.producerName %></td>
+
+                    <td style="text-align: center">
+                      <b style="color: #0024FF;"><%= VND.format(danhsach[i].priceIn) %></b>
+                    </td>
+                    <td style="text-align: center">
+                      <b style="color: #FF0000;"><%= VND.format(danhsach[i].priceOut) %></b>
+                    </td>
+                    <td style="text-align: center">
+                      <% if(danhsach[i].productStatus == 0){ %> 
+                        Nổi bật 
+                      <% }else if(danhsach[i].productStatus == 1){ %> Mới <% } else { %> Tắt <%
+                      } %>
+                    </td>
+                    <td style="text-align: center">
+                      <a href="/admin_product/<%= danhsach[i].slug %>" style="margin-right: 8px;" class="my_links" ui-toggle-class="">
+                        <i class="fa-regular fa-eye btn btn-primary"
+                        style="width: 21px; height: 21px; padding: 0px;
+                        margin-bottom: 10px; color: #fff"
+                        ></i>
+                      </a>
+                      <a href="/edit_product/<%= danhsach[i].slug %>" class="my_links" ui-toggle-class="">
+                        <i
+                          class="fa-solid fa-square-pen"
+                          style="font-size: 25px; color: #5cb85c"
+                        ></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--main content end-->
+    </section>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

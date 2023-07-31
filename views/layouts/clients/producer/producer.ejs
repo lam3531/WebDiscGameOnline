@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">          
+    <title><%= title %></title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    
+    <div class="container">
+        <div class="cart-p">
+            <div class="cart-heading">
+                <a href="/producer/<%= id %>" style="text-decoration: none; color:black"><h3><%= title %></h3></a>   
+            </div>
+            <div class="filter-catergory">
+                <p>Lọc sản phẩm theo: </p>
+                <div class="by-price">
+                    <label for=""><b>Giá tiền</b></label>
+                    <select class="select-price" id="selectPrice" onchange="sortingValue()">
+                        <option value="Default">Mặc định</option>
+                        <option value="LowToHigh">Tăng dần</option>
+                        <option value="HighToLow">Giảm dần</option>
+                    </select>
+                </div>
+            </div>
+          
+            <p id="test" style="display: none;"><%= data %></p>
+            <p style="display: none;" id="length"><%= data.length %></p>
+            <div class="product-grid row row-cols-4"></div>
+
+            <div class="pagination">
+                <button class="page-numbers"></button>
+            </div>  
+        </div>
+    </div>
+
+    <div style="width: 100%; background-color: #F3F4F6; margin-top: 55px;"></div>
+<script>
+const VND = new Intl.NumberFormat("vi-VN", {
+  style: "currency",
+  currency: "VND",
+});
+const value = document.getElementById("test").innerHTML;
+const productStrings = value.replace(/'/g, "\"").replace(/(\w+)\s*:/g, "\"$1\":");
+const jsonProducts = `[${productStrings}]`;
+const products = JSON.parse(jsonProducts);
+
+const productsPerPage = 12;
+let currentPage = 1; // trang hiện tại
+
+// tính toán số lượng trang cần thiết
+const totalPages = Math.ceil(products.length / productsPerPage);
+
+// hiển thị sản phẩm trên trang hiện tại
+function displayProductsOnCurrentPage(sortedProducts = products) {
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const productsOnCurrentPage = sortedProducts.slice(startIndex, endIndex);
+
+  const productGrid = document.querySelector('.product-grid');
+  productGrid.innerHTML = ''; // xóa bỏ các sản phẩm cũ
+
+  // hiển thị sản phẩm mới
+  productsOnCurrentPage.forEach((product) => {
+    const productItem = document.createElement('div');
+    productItem.classList.add('col', 'mb-4', 'col-product');
+    productItem.setAttribute('data-price', product.priceOut);
+    productItem.innerHTML = `
+      <div class="col product">
+        <div class="sp-box">
+        <a href="/product/${product.slug}">
+          <img src="/images/${product.productImage}" class="card-img-top" alt="">
+          <div class="p-title">
+            <p>${product.productName}</p>
+          </div>
+          <div class="price">
+            <p id="price">${VND.format(product.priceOut)}</p>
+          </div>
+        </a>
+        </div>
+      </div>
+    `;
+    productGrid.appendChild(productItem);
+  });
+
+  // sử dụng flex-wrap để wrap các sản phẩm thành từng dòng mới
+  productGrid.style.display = 'flex';
+  productGrid.style.flexWrap = 'wrap';
+}
+
+// xử lý sự kiện khi người dùng chuyển sang trang khác
+function handlePageChange(page) {
+  currentPage = page;
+  sortingValue();
+}
+
+// hiển thị các nút phân trang và số trang hiện tại
+function displayPaginationButtons() {
+  const pagination = document.querySelector('.pagination');
+  const pageNumberContainer = pagination.querySelector('.page-numbers');
+
+  let currentButton;
+  
+  // clear existing page number buttons
+  pageNumberContainer.innerHTML = '';
+
+  // create a button for each page number
+  for (let i = 1; i <= totalPages; i++) {
+    const pageNumberButton = document.createElement('button');
+    pageNumberButton.classList.add('number');
+    pageNumberButton.textContent = i;
+    pageNumberContainer.appendChild(pageNumberButton);
+
+    // add an event listener to handle page changes when the button is clicked
+    pageNumberButton.addEventListener('click', () => {
+      handlePageChange(i);
+      currentButton.classList.remove('current'); // remove the current class from the previous button
+      currentButton = pageNumberButton; // update the current button
+      currentButton.classList.add('current'); // add the current class to the current button
+    });
+
+    if (i === currentPage) {
+        currentButton = pageNumberButton;
+        pageNumberButton.classList.add('current');
+    }
+  }
+}
+
+// sắp xếp sản phẩm theo giá tiền
+function sortingValue() {
+  const selectedOption = document.getElementById('selectPrice').value;
+  let sortedProducts;
+
+  if (selectedOption === 'LowToHigh') {
+    sortedProducts = products.sort((a, b) => a.priceOut - b.priceOut);
+  } else if (selectedOption === 'HighToLow') {
+    sortedProducts = products.sort((a, b) => b.priceOut - a.priceOut);
+  } else {
+    sortedProducts = products.sort((a, b) => a.productName.localeCompare(b.productName));
+  }
+
+  displayProductsOnCurrentPage(sortedProducts);
+}
+
+// khởi tạo trang đầu tiên và hiển thị sản phẩm
+displayProductsOnCurrentPage();
+
+// hiển thị nút phân trang
+displayPaginationButtons();
+
+// sắp xếp sản phẩm theo giá tiền khi trang được load
+window.onload = function () {
+  sortingValue();
+};
+
+// sắp xếp sản phẩm theo giá tiền khi người dùng thay đổi option
+document.getElementById('selectPrice').addEventListener('change', () => {
+  sortingValue();
+});
+</script>
+     <%- include('../partials/footer') %>
+</body>
+</html>

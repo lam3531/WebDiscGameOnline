@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Doanh thu theo sản phẩm</title>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="table-agile-info">
+          <div class="monthlySale">
+
+          <h3>Thống kê doanh thu từng sản phẩm</h3>
+          <br>
+          <div class="panel panel-default">
+            <div class="table-responsive" style="overflow-x: hidden;">
+              <table id="myTable" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 55px">STT</th>
+                    <th style="text-align: center; width: 200px" data-orderable="false">Tên sản phẩm</th>
+                    <th style="text-align: center; width: 120px" data-orderable="false">Giá nhập</th>
+                    <th style="text-align: center; width: 120px" data-orderable="false">Giá bán</th>
+                    <th style="text-align: center; width: 200px" data-orderable="false">Số lượng nhập</th>
+                    <th style="text-align: center; width: 150px" data-orderable="false">Số lượng bán</th>
+                    <th style="text-align: center; width: 150px" data-orderable="false">Số lượng kho</th>
+                    <th style="text-align: center; width: 150px" data-orderable="false">Tổng nhập</th>
+                    <th style="text-align: center; width: 120px" data-orderable="false">Tổng bán</th>
+                    <th style="text-align: center; width: 120px" data-orderable="false">Doanh thu</th>
+                    <th style="display: none">0</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <% for(let i=0; i < danhsach.length; i++) { %>
+                        <% danhsach[i].productList.forEach(function(id) { %>
+                    <tr>
+                        <td style="text-align: center;"><%= i+1 %></td>
+                        <td style="text-align: center;"><%= id.productName %></td>
+                        <td style="text-align: center;"><%= VND.format(id.priceIn) %></td>
+                        <td style="text-align: center;"><%= VND.format(id.priceOut) %></td>
+                        <td style="text-align: center;"><%= danhsach[i].total %></td>
+                        <td style="text-align: center;"><%= (danhsach[i].total)-(id.productQuantity) %></td>
+                        <td style="text-align: center;"><%= id.productQuantity %></td>
+                        <td style="text-align: center;"><%= VND.format((danhsach[i].total) * (id.priceIn)) %></td>
+                        <td style="text-align: center;"><%= VND.format(((danhsach[i].total)-(id.productQuantity)) * (id.priceOut)) %></td>
+                        <td style="text-align: center;"><%= VND.format((((danhsach[i].total)-(id.productQuantity)) * (id.priceOut)) - ((danhsach[i].total) * (id.priceIn))) %></td>
+                        <td style="display: none" id="revenue"><%= (((danhsach[i].total)-(id.productQuantity)) * (id.priceOut)) - ((danhsach[i].total) * (id.priceIn)) %></td>
+                    </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+              </table>
+              <br>
+            </div> 
+              <div class="sales-price">
+                <b style="margin-right: 15px">Tổng doanh thu:</b>
+                <p id="all" style="color: #dc3545; font-weight: 500">
+                </p>
+              </div>
+          </div>
+        </div>
+      </section>
+      <!--main content end-->
+    </section>
+    <%- include('../partials/footer') %>
+    <script>
+        const VND = new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        });
+        const tb = document.getElementById('myTable');
+        const trs = document.getElementsByTagName('tr');
+        var all = 0;
+        for(var i=0; i<trs.length; i++){
+            const revenue = document.getElementById("myTable").rows[i].cells[10].innerHTML;
+            const convert = parseInt(revenue);
+            all += convert;
+        }
+        document.getElementById("all").innerHTML = VND.format(all);      
+    </script>
+  </body>
+</html>

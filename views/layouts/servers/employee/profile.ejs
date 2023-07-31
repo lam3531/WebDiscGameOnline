@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thống kê</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Hồ sơ cá nhân</h3>
+                <div class="adminUser-detail" style="margin-top: 15px">
+                    <p>Họ và tên</p>
+                        <p style="font-weight: 600; margin-top: 10px; margin-bottom: 10px;"><%= adminName %></p>
+                    <p>Địa chỉ email</p>
+                        <p style="font-weight: 600; margin-top: 10px; margin-bottom: 10px;"><%= nhanvat.email %></p>
+                    <p>Chức vụ</p>
+                        <p style="font-weight: 600; margin-top: 10px; margin-bottom: 10px;"><% if(nhanvat.role == 0){ %> Quản lý <% }else
+                            if(nhanvat.role == 1){ %> Nhân viên kho <% }else if(nhanvat.role ==
+                            2){ %> Nhân viên đơn hàng <% }else if(nhanvat.role == 3){ %> Nhân viên CSKH <% } %></p>
+                </div>
+        </section>
+    </section>
+    <!--main content end-->
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

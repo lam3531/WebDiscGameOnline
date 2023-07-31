@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <div class="container">
+        <div class="payment">
+            <%if(!carti[0]){%>
+                <div class="cart-table">
+                  <p style="margin-top: 18px; font-size: 18px; font-weight:500">Giỏ hàng của bạn đang trống!!</p>
+                </div>
+                <div class="container" style="display:flex; justify-content:center;">
+                  <div class="cart-table-img">
+                    <img src="/images/empty-cart.png" style="width: 280px;" alt="">
+                  </div>
+                  </div>
+                <div class="container" style="display:flex; justify-content:center;">
+                  <div class="back-home" style="width: 300px;">
+                    <a href="/">
+                        <button class="btn btn-outline-dark btn-back-home">TIẾP TỤC MUA HÀNG</button>
+                    </a>
+                </div>
+                </div>
+              <%}else{%>
+            <form action="/creat_new_order" method="post" id="main-form">
+            <div class="row">
+                <div class="col-6" style="border-right: 1px solid rgba(0,0,0,0.10);">
+                    <div class="payment-heading">
+                        <i class="fa-regular fa-credit-card"></i>
+                        <h3>Đơn hàng</h3>
+                    </div>
+               
+                    <div class="payment-table">
+                        <table style="vertical-align: middle;" class="table table-bordered">
+                            <thead>
+                                <tr style="font-weight: 700">
+                                    <td>Tên sản phẩm</td>
+                                    <td>Hình ảnh</td>
+                                    <td>Đơn giá</td>
+                                    <td>Số lượng</td>
+                                    <td>Thành tiền</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <input type="hidden" name="user_id_hidden" value="<%= userid %>">
+                                <% for(let i=0; i < danhsach.length; i++) { %> <%
+                                    danhsach[i].items.forEach(function(pid) { %>
+                                <tr>
+                                    <input form="main-form" name="product_id_hidden" type="hidden" value="<%= pid._id %>"/>
+                                    <input form="main-form" name="quantity_hidden" type="hidden" value="<%= pid.quantity %>" />
+                                    <input form="main-form" name="product_name_hidden" type="hidden" value="<%= pid.productID.productName %>"/>
+                                    <td form="main-form" style="width: 220px;"><%= pid.productID.productName %></td>
+                                    <td form="main-form"><img style="width:60px; height:80px" src="/images/<%= pid.productID.productImage %>"></td>
+                                    <td form="main-form" style="color:#DC3545;"><%= VND.format(pid.productID.priceOut) %></td>
+                                    <td form="main-form"><%= pid.quantity %></td>
+                                    <td form="main-form" style="color:#DC3545;"><%= VND.format(pid.productID.priceOut * pid.quantity) %></td>
+                                </tr>
+                                <% }); %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                        <div class="payment-coupon" style="margin-left: 25px;">
+                            <h4 style="font-weight: 700; line-height: 20px;">NHẬP MÃ COUPON ƯU ĐÃI</h4>
+                            <%if(success.length > 0){%>
+                                <p style="font-size: 14px;color: green;"><%= success %></p>
+                                <p><b>Mã giảm giá đã áp dụng:</b> <%= code %></p>
+                                <%} else if(error.length > 0){%>
+                                    <p style="font-size: 14px;color: red;"><%= error %></p>
+                                    <%}else{%>
+                                        <p style="font-size: 14px;">Chỉ sử dụng 1 mã cho 1 tài khoản</p>
+                                        <%}%> 
+                            
+                            <%if(success.length > 0){%>
+                                <div style="display:flex; margin-bottom: 15px;">
+                                    <input id="code" form="sub-form" type="hidden" class="form-control" placeholder="Nhập mã giảm giá" style="width:300px; border-radius: 10px; margin-right: 10px; width: 100%;" name="couponCode">
+                                    <input id="coupon3" form="sub-form" type="hidden" class="btn btn-primary" name="check_coupon" value="ÁP DỤNG" style="font-weight: 600; width: 40%;" >
+                                </div>
+                                <%} else if(error.length > 0){%>
+                                    <div style="display:flex; margin-bottom: 15px;">
+                                        <input id="code" form="sub-form" type="text" class="form-control" placeholder="Nhập mã giảm giá" style="width:300px; border-radius: 10px; margin-right: 10px; width: 100%;" name="couponCode">
+                                        <input id="coupon3" form="sub-form" type="submit" class="btn btn-primary" name="check_coupon" value="ÁP DỤNG" style="font-weight: 600; width: 40%;" >
+                                    </div>
+                                    <%}else{%>
+                                        <div style="display:flex; margin-bottom: 15px;">
+                                            <input id="code" form="sub-form" type="text" class="form-control" placeholder="Nhập mã giảm giá" style="width:300px; border-radius: 10px; margin-right: 10px; width: 100%;" name="couponCode">
+                                            <input id="coupon3" form="sub-form" type="submit" class="btn btn-primary" name="check_coupon" value="ÁP DỤNG" style="font-weight: 600; width: 40%;" >
+                                        </div>
+                                        <%}%>
+                        </div>
+
+                        <div class="payment-price">
+                            <table class="table" style="margin-left: 10px; width: 110%;">
+                                <tbody>
+                                    <tr style="border: white;">
+                                        <td style="width: 100%;">Tạm tính:</td>
+                                        <td style="text-align: right; width: 100%;"><%= VND.format(convert) %></td>
+                                        <td form="main-form" style="visibility: hidden;text-align: right;" id="cost"><%= convert %></td>
+                                        <input form="main-form" type="hidden" name="provisional" value="<%= convert %>">
+                                    </tr>
+                                    <tr style="border: white;">
+                                        <td style="width: 100%;">Phí vận chuyển:</td>
+                                        <td style="text-align: right; width: 100%;" id="shippingcost"><%= VND.format(0) %></td>
+                                        <td style=" text-align: right;" id="shippingcost"></td>
+                                        <input form="main-form" type="hidden" name="shippingFee" value="0" id="fee">
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 100%;">Mã giảm giá:</td>
+                                        <td style="text-align: right; width: 100%;"><%if(cash.length > 0){%><%= cash %><%}else{%>0 đ<%}%></td>
+                                        <input type="hidden" id="blunt" value="<%if(blunt.length > 0){%><%= blunt %><%}else{%>0<%}%>"/>
+                                        <input type="hidden" id="percent" value="<%if(percent.length > 0){%><%= percent %><%}else{%>0<%}%>"/>
+                                        <input type="hidden" form="main-form" value="<%if(code.length > 0){%><%= code %><%}else{%>Không<%}%>" name="couponCode">
+                                    </tr>
+                                    <tr style="border: white;">
+                                        <td style="font-weight: 500;width: 100%;">Tổng tiền:</td>
+                                        <td style="text-align: right; color:#DC4E45; font-weight:500;width: 100%;" id="total">
+                                            <%if(blunt.length > 0){%><%= VND.format(convert-blunt) %><%}else if(percent.length > 0){%><%= VND.format(convert-convert*percent) %><%}else{%><%= VND.format(convert) %><%}%></td>
+                                        <input form="main-form" type="hidden" name="total" value="<%= convert %>" id="subTotal">
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                <div class="col-6">
+                    <div class="payment-delivery">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <h3>Thông tin vận chuyển</h3>
+                    </div>
+                    <div class="info-detail">
+                        <div class="payment-infomation">
+                            <div class="payment-form">
+                                <%if(nameError.length > 0){%><p style="font-size: 14px;color: red;"><%= nameError %></p><%}%>
+                                <p style="font-weight: 500;">Họ và tên người nhận <span style="color: red;">*</span></p>
+                                <%if(nameED.length > 0){%><input form="main-form" id="myInputName" type="text" name="shippingName" value="<%= nameED %>" oninput="myNameFunction()"><%}else{%>
+                                <input form="main-form" type="text" id="myInputName" name="shippingName" value="<%= fullname %>" oninput="myNameFunction()"><%}%>
+                                <input form="sub-form" id="myInputNameHidden" type="hidden" name="shippingName" value="<%= fullname %>">
+
+                                <%if(mobileError.length > 0){%><p style="font-size: 14px;color: red;"><%= mobileError %></p><%}%>
+                                <p style="font-weight: 500;">Số điện thoại người nhận <span style="color: red;">*</span></p>
+                                <%if(mobileED.length > 0){%><input form="main-form" type="text" name="shippingPhone" value="<%= mobileED %>" oninput="myMobileFunction()"><%}else{%>
+                                <input form="main-form" id="myInputMobile" type="text" name="shippingPhone" value="<%= phone %>" oninput="myMobileFunction()"><%}%>
+                                <input form="sub-form" id="myInputMobileHidden" type="hidden" name="shippingPhone" value="<%= phone %>">
+                            </div>
+                            <div class="payment-form">
+                                <label style="margin-top: 10px; font-weight: 500;">Địa chỉ giao hàng</label>
+                                <%if(cityError.length > 0){%><p style="font-size: 14px;color: red;"><%= cityError %></p><%}%>
+                                <p style="font-weight: 500;">Tỉnh thành <span style="color: red;">*</span></p>
+                                <select class="form-select form-select-sm mb-3" name="shippingCity" id="city" aria-label=".form-select-sm">
+                                    <option value="" selected>Chọn tỉnh thành</option>           
+                                </select>
+                                
+                                <%if(districtError.length > 0){%><p style="font-size: 14px;color: red;"><%= districtError %></p><%}%>
+                                <p style="font-weight: 500;">Quận huyện <span style="color: red;">*</span></p>
+                                <select class="form-select form-select-sm mb-3" name="shippingDistrict" id="district" aria-label=".form-select-sm">
+                                    <option value="" selected>Chọn quận huyện</option>
+                                </select>
+                                
+                                <%if(wardError.length > 0){%><p style="font-size: 14px;color: red;"><%= wardError %></p><%}%>
+                                <p style="font-weight: 500;">Phường xã <span style="color: red;">*</span></p>
+                                <select class="form-select form-select-sm" id="ward" name="shippingWard" aria-label=".form-select-sm">
+                                    <option value="" selected>Chọn phường xã</option>
+                                </select>
+
+                                <%if(addressError.length > 0){%><p style="font-size: 14px;color: red;"><%= addressError %></p><%}%>
+                                <p style="font-weight: 500;">Địa chỉ chi tiết <span style="color: red;">*</span></p>
+                                <input form="main-form" id="myInputAddress" type="text" name="shippingAddress" value="<%= addressED %>" oninput="myAddressFunction()">
+                                <input form="sub-form" id="myInputAddressHidden" type="hidden" name="shippingAddress" value="<%= addressED %>">
+                                
+                                <p style="font-weight: 500;">Ghi chú (Nếu có)</p>
+                                <input form="main-form" id="myInputNote" type="text" name="shippingNote" value="<%= noteED %>" oninput="myNoteFunction()">
+                                <input form="sub-form" id="myInputNoteHidden" type="hidden" name="shippingNote" value="<%= noteED %>">
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>   
+            
+
+            <div class="payment-method">
+                <h4>Phương thức thanh toán</h4> <h2>Mặc định sẽ là COD</h2>
+                <%if(methodError.length > 0){%><p style="font-size: 14px;color: red;"><%= methodError %></p><%}%>
+                    <div class="payCash">
+                        <span>
+                            <label>
+                                <input form="main-form" name="paymentMethod" value="COD" type="radio" checked>
+                                <img src="/images/GDTT.png" alt="">
+                                    Thanh toán tiền mặt khi nhận hàng (COD)
+                                <p>Bạn chỉ phải thanh toán khi nhận được hàng. Nhân viên sẽ liên hệ bạn để xác nhận đơn hàng trong vòng 24h
+                            sau khi bạn hoàn tất đơn hàng</p>
+                            </label>
+                        </span>
+                    </div>
+                    <!-- <div class="payOnline">
+                        <span>
+                            <label>
+                                <input form="main-form" name="paymentMethod" value="VNPAY" type="radio">
+                                <img src="/images/Vnpay-logo.jpg" alt="">
+                                    Thanh toán VNPAY
+                                <p>Nhân viên sẽ liên hệ bạn để xác nhận đơn hàng trong vòng 24h sau khi bạn hoàn tất đơn hàng</p>
+                            </label>
+                        </span>
+                    </div>
+                    <div class="payOnline">
+                        <span>
+                            <label>
+                                <input form="main-form" name="paymentMethod" value="MOMO" type="radio">
+                                <img src="/images/Logo-MoMo.png" alt="">
+                                    Thanh toán Momo
+                                <p>Nhân viên sẽ liên hệ bạn để xác nhận đơn hàng trong vòng 24h sau khi bạn hoàn tất đơn hàng</p>
+                            </label>
+                        </span>
+                    </div> -->
+                    <div class="payOnline">
+                        <span>
+                            <label>
+                                <input form="main-form" name="paymentMethod" value="BANKING" type="radio">
+                                <img src="/images/bank.png" alt="">
+                                    Thanh toán chuyển khoản ngân hàng
+                                <p>Vui lòng quét mã dưới đây. Nhân viên sẽ liên hệ bạn để xác nhận đơn hàng trong vòng 24h
+                            sau khi bạn hoàn tất đơn hàng</p>
+                                <p>Nhân viên sẽ liên hệ với bạn qua email/ điện thoại để xác nhận đơn hàng.
+                        <br>Thông tin chuyển khoản:<span style="color:blue; font-weight: bold;"> Ngân hàng TP BANK - 04182459601 - MAI KỲ PHONG</span>
+                        <br>Nội dung chuyển khoản: ck + "Họ tên" +"Email" + "Số điện thoại".
+                            <br><span style="color:red; font-weight: bold;">LƯU Ý</span>: Vui lòng ghi đúng nội dung chuyển khoản <span style="color:red; font-weight: bold;">ĐÚNG NỘI DUNG BÊN TRÊN.</span>
+                        <br>Bạn có thể thao tác chuyển khoản nhanh chóng bằng cách mở ứng dụng ngân hàng và chọn quét mã QR bên dưới và ghi đúng nội dung chuyển khoản.</p>
+                        <img style="width: 235px; height: 235px; border: 1px solid rgba(0,0,0,0.08); margin-left: 500px;" src="/images/qrchuyenkhoan.jpg" alt="">
+                            </label>
+                        </span>
+                    </div>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <a href="/cart/<%= userid %>" style="margin-left: 85px;">
+                    <button type="button" class="btn btn-primary btn-payment" style="font-size: 20px"><i class="fa-solid fa-arrow-left-long"></i> Quay lại giỏ hàng</button>
+                </a>
+                <button form="main-form" type="submit" class="btn btn-outline-dark btn-payment">Đặt hàng</button>    
+            </div>
+            <% } %>
+        </form> 
+        <form action="/add_coupon_checkout" method="post" id="sub-form"></form>
+        </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+});
+
+var citis = document.getElementById("city");
+var district = document.getElementById("district");
+var ward = document.getElementById("ward");
+var shippingFee = document.getElementById("fee");
+var shippingCost = document.getElementById("shippingcost");
+var cost = document.getElementById("cost").innerHTML;
+var total = document.getElementById("total");
+var subTotal = document.getElementById("subTotal");
+var blunt = document.getElementById("blunt").value;
+var percent = document.getElementById("percent").value;
+var Parameter = {
+  url: "https://raw.githubusercontent.com/lam3531/vietnam/main/data.json",
+  method: "GET",
+  responseType: "application/json",
+};
+var promise = axios(Parameter);
+promise.then(function (result) {
+  renderCity(result.data);
+});
+function renderCity(data) {
+  for (const x of data) {
+    const option = new Option(x.Name, x.Name);
+    option.setAttribute('shippingFee', x.Fee);
+    citis.options.add(option);
+  }
+
+  citis.onchange = function () {
+    district.length = 1;
+    ward.length = 1;
+
+    if (this.value !== "") {
+      const result = data.filter(n => n.Name === this.value);
+
+      for (const k of result[0].Districts) {
+        const option = new Option(k.Name, k.Name);
+        district.options.add(option);
+      }
+    }
+    const selectedOption = citis.options[citis.selectedIndex];
+    const fee = selectedOption.getAttribute("shippingFee");
+    shippingFee.value = fee;
+    shippingCost.innerHTML = VND.format(fee);
+
+    total.innerHTML = VND.format((parseInt(shippingFee.value) + parseInt(cost) - parseInt(blunt)) - percent*(parseInt(shippingFee.value) + parseInt(cost) - parseInt(blunt)));
+    subTotal.value = (parseInt(shippingFee.value) + parseInt(cost) - parseInt(blunt)) - percent*(parseInt(shippingFee.value) + parseInt(cost) - parseInt(blunt));
+    this.options[0].style.display = "none";
+  };
+
+  district.onchange = function () {
+    ward.length = 1;
+    const selectedCityName = citis.value;
+    const selectedDistrictName = this.value;
+
+    if (selectedCityName !== "" && selectedDistrictName !== "") {
+      const city = data.find(n => n.Name === selectedCityName);
+      const district = city.Districts.find(n => n.Name === selectedDistrictName);
+
+      for (const w of district.Wards) {
+        const option = new Option(w.Name, w.Name);
+        ward.options.add(option);
+      }
+    }
+    this.options[0].style.display = "none";
+  };
+  ward.onchange = function () {
+    this.options[0].style.display = "none";
+  };
+}
+function myNameFunction(){
+    let name = document.getElementById("myInputName").value;
+    document.getElementById("myInputNameHidden").value = name;
+}
+function myMobileFunction(){
+    let mobile = document.getElementById("myInputMobile").value;
+    document.getElementById("myInputMobileHidden").value = mobile;
+}
+function myAddressFunction(){
+    let address = document.getElementById("myInputAddress").value;
+    document.getElementById("myInputAddressHidden").value = address;
+}
+function myNoteFunction(){
+    let note = document.getElementById("myInputNote").value;
+    document.getElementById("myInputNoteHidden").value = note;
+}
+</script>
+     <%- include('../partials/footer') %>
+</body>
+</html>

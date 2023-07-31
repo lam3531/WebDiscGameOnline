@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Danh sách bình luận</title>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="table-agile-info">
+            <h3>Bình luận của khách hàng</h3>
+            <%if(success.length > 0){%>
+              <div class="alert alert-success" style="margin-top: 15px;">
+                  <%= success %>
+              </div>
+              <%} else if(error.length > 0){%>
+                  <div class="alert alert-danger" style="margin-top: 15px;">
+                      <%= error %>
+                  </div>
+                  <%}%>
+
+            <div class="panel panel-default">
+                <div class="table-responsive" style="margin-top: 30px;">
+                    <table id="myTable" class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th style="width: 30px;">STT</th>
+                            <th style="width: 110px; text-align: center;" data-orderable="false">Tên khách hàng</th>
+                            <th style="width: 300px; text-align: center;" data-orderable="false">Bình luận</th>
+                            <th style="width: 180px; text-align: center;" data-orderable="false">Ngày bình luận</th>
+                            <th style="width: 150px; text-align: center;" data-orderable="false">Sản phẩm</th>
+                            <th style="width: 100px; text-align: center;" data-orderable="false">Trạng thái</th>
+                            <th style="width: 100px; text-align: center;" data-orderable="false">Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                          <% for(let i=0; i < comments.length; i++) { %>
+                            <tr>
+                              <td style="text-align: center;"><%= i+1 %></td>
+                              <td><%= comments[i].userID.fullname %></td>
+                              <td><%= comments[i].commentInfo %></td>
+                              <td style="text-align: center;"><%= comments[i].commentDate %></td>
+                              <td style="text-align: center;"><%= comments[i].productID.productName %></td>
+                              <% if(comments[i].commentStatus == 0){ %>
+                                <td style="text-align: center;"><b style="color: rgb(84, 77, 77);">Ẩn</b></td>
+                              <% }else if(comments[i].commentStatus == 1){ %>
+                                <td style="text-align: center;"><b style="color: rgb(64, 196, 64);">Hiển thị</b></td>
+                              <%}%>
+                              <% if(comments[i].commentStatus == 0){ %>
+                                <td style="text-align: center;">
+                                  <form action="/update_commentStatus/<%= comments[i]._id %>" method="post">
+                                    <button class="btn btn-primary"><b>Duyệt</b></button>
+                                  </form>
+                                </td>
+                              <% }else if(comments[i].commentStatus == 1){ %>  
+                                <td style="text-align: center;">
+                                  <form action="/update_commentStatus_1/<%= comments[i]._id %>" method="post">
+                                    <button class="btn btn-danger"><b>Hủy Duyệt</b></button>
+                                  </form>
+                                </td>
+                              <%}%>
+                            </tr>
+                          <% } %> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+      </section>
+      <!--main content end-->
+    </section>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

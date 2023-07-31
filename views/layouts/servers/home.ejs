@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thống kê</title>
+    <%- include('partials/head') %>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@^3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
+</head>
+<style>
+  #sales-table-body img {
+  width: 50px;
+  height: 70px;
+}
+table, td{
+  border-bottom: 1px solid #DDD;
+}
+</style>
+<body>
+    <!--sidebar start-->
+    <%- include('partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="market-updates">
+                
+                <div class="col-md-3 market-update-gd">
+                    <div class="market-update-block clr-block-2">
+                        <a href="/customers">
+                        <div class="col-md-4 market-update-right">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="col-md-8 market-update-left">
+                            <h4>Khách hàng</h4>
+                            <h3><%= number %></h3>
+                            <p>Số lượt đăng ký tài khoản</p>
+                        </div>
+                        </a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                
+
+                
+                <div class="col-md-3 market-update-gd">
+                    <div class="market-update-block clr-block-1">
+                        <a href="/comment">
+                        <div class="col-md-4 market-update-right">
+                            <i style="color: white;" class="fa fa-comments fa-3x" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-md-8 market-update-left">
+                            <h4>Bình luận</h4>
+                            <h3><%= comment %></h3>
+                            <p>Số lượng bình luận</p>
+                        </div>
+                        </a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                
+
+                
+                  <div class="col-md-3 market-update-gd">
+                      <div class="market-update-block clr-block-3">
+                          <a href="/new_orders_today">
+                          <div class="col-md-4 market-update-right">
+                            <i style="color: white;" class="fa-solid fa-truck-ramp-box fa-3x" aria-hidden="true"></i>
+                          </div>
+                          <div class="col-md-8 market-update-left">
+                                  <h4 style="width:170px; margin-left: -5px;">Đơn mới trong ngày</h4>
+                                  <h3 style="margin-left: -5px;"><%= orders %></h3>
+                                  <p style="margin-left: -5px;">Số lượng đơn chưa duyệt</p>
+                          </div>
+                          </a>
+                          <div class="clearfix"></div>
+                      </div>
+                  </div>
+                  
+
+                
+                <div class="col-md-3 market-update-gd">
+                    <div class="market-update-block clr-block-4">
+                        <a href="/new_orders">
+                        <div class="col-md-4 market-update-right">
+                          <i style="color: white;" class="fa-solid fa-boxes-packing fa-3x"></i>
+                        </div>
+                        <div class="col-md-8 market-update-left">
+                                <h4>Đơn chưa duyệt</h4>
+                                <h3><%= order %></h3>
+                                <p>Số lượng đơn chưa duyệt</p>
+                        </div>
+                        </a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                
+
+                
+                <div class="graphBox">
+                  <div class="box" style="height: 600px;">
+                    <div class="bestSells-Box">
+                      <div class="table-agile-info" style="padding: 0;">
+                        <h3 style="text-align: center;">Sản phẩm bán chạy nhất</h3>
+                        <div class="sale-monthly" style="margin-top: 25px;">
+                          <div class="by-monthly">
+                            <div id="best-sale-data" data-bestsale='<%- JSON.stringify(bestSale) %>'></div>
+                            <select class="select-monthly" id="month-select" onchange="updateTable()">
+                              <option disabled selected hidden>Chọn tháng</option>
+                              <option value="1">Tháng 1</option>
+                              <option value="2">Tháng 2</option>
+                              <option value="3">Tháng 3</option>
+                              <option value="4">Tháng 4</option>
+                              <option value="5">Tháng 5</option>
+                              <option value="6">Tháng 6</option>
+                              <option value="7">Tháng 7</option>
+                              <option value="8">Tháng 8</option>
+                              <option value="9">Tháng 9</option>
+                              <option value="10">Tháng 10</option>
+                              <option value="11">Tháng 11</option>
+                              <option value="12">Tháng 12</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="table-responsive" style="margin-top: 15px;">
+                          <table id="table table-bordered sales-table ">
+                            <thead>
+                              <tr>
+                              </tr>
+                            </thead>
+                            <tbody id="sales-table-body"></tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="box">
+                    <h3 style="text-align: center;">Doanh thu từng tháng năm 2023</h3>
+                    <p id="monthlyData" style="display: none;"><%= monthlyData %></p>
+                    <br><br>
+                    <canvas id="myChart" style="height: 445.8px; width: 745.6px;"></canvas>
+                  </div>
+                </div>
+                
+
+                <div class="other-Box">
+                  <div class="box">
+                    <div class="outOfStock-Box">
+                      <div class="table-agile-info">
+                        <h3 style="text-align: center;">Sản phẩm sắp hết hàng</h3>
+                        <div class="table-responsive">
+                          <table id="myTable" class="table table-bordered table-outOfStock">
+                            <thead>
+                              <th style="text-align: center;">STT</th>
+                              <th style="text-align: center;" data-orderable="false">Tên sản phẩm</th>
+                              <th style="text-align: center;"data-orderable="false">Hình ảnh</th>
+                              <th style="text-align: center;"data-orderable="false">Số lượng</th>
+                              <th style="text-align: center;"data-orderable="false">Trạng thái</th>
+                            </thead>
+    
+                            <tbody>
+                              <% for(let i=0; i < outOfStock.length; i++) { %>
+                              <tr>
+                                <td><%= i+1 %></td>
+                                <td><%= outOfStock[i].productName %></td>
+                                <td><img src="/images/<%= outOfStock[i].productImage %>" width="50" height="80" alt=""></td>
+                                <td><%= outOfStock[i].productQuantity %></td>
+                                <td><% if(outOfStock[i].productQuantity == 0){ %>
+                                  <p class="btn btn-danger">Hết hàng</p>
+                                <%} else { %>
+                                  <p class="btn btn-warning">Sắp hết hàng</p>
+                                  <%}%>
+                                </td>
+                              </tr>
+                              <% } %>
+                            </tbody>
+                          </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+    </section>
+
+<script>
+// Dữ liệu bán hàng cho các tháng
+let salesDataEl = document.getElementById('best-sale-data');
+let salesData = salesDataEl ? JSON.parse(salesDataEl.getAttribute('data-bestsale')) : [];
+// Hàm tạo bảng hiển thị dữ liệu bán hàng cho tháng được chọn
+
+function createSalesTable(month) {
+  let salesDataForMonth = salesData.find(item => item.month === month - 1);
+  let salesTableBody = document.getElementById('sales-table-body');
+  salesTableBody.innerHTML = '';
+
+  if (salesDataForMonth) {
+    salesDataForMonth.sales.forEach(item => {
+      let row = document.createElement('tr');
+      row.innerHTML = `
+        <td style="height: 75px; width: 70px;padding:10px"><img src="/images/${item.productImage}" alt="${item.productName}  style="width:100px; height:80px;" ></td>
+        <td style="width: 200px;padding:10px">${item.productName}</td>
+        <td style="text-align: center; color: #3C82B8;"><p>${item.totalCount} <br>sản phẩm</p></td>
+      `;
+      salesTableBody.appendChild(row);
+    });
+  } else {
+    let row = document.createElement('tr');
+    row.innerHTML = `
+      <td colspan="3">Không có dữ liệu</td>
+    `;
+    salesTableBody.appendChild(row);
+  }
+}
+
+// Hàm cập nhật dữ liệu bán hàng khi tháng được chọn thay đổi
+function updateSalesTable() {
+  let monthSelect = document.getElementById('month-select');
+  let selectedMonth = parseInt(monthSelect.value);
+  createSalesTable(selectedMonth);
+}
+
+// Đặt giá trị mặc định cho thẻ select
+let today = new Date();
+let currentMonth = today.getMonth()+1;
+let monthSelect = document.getElementById('month-select');
+monthSelect.value = currentMonth.toString();
+
+// Gán sự kiện onchange cho thẻ select
+monthSelect.addEventListener('change', updateSalesTable);
+
+// Hiển thị bảng cho tháng đầu tiên khi trang được tải lần đầu
+createSalesTable(currentMonth);
+</script>
+<script>
+        const value = document.getElementById("monthlyData").innerHTML;
+        const monthlyData = value.split(",");
+        const [var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12] = monthlyData;
+
+        var startOfYear = moment().month(0);
+        var endOfYear = moment().month(11);
+        var months = [];
+        var month = startOfYear;
+
+        while (month <= endOfYear) {
+          months.push(month.format("YYYY-MM"));
+          month = month.clone().add(1, "M");
+        }
+        const data = {
+          labels: months,
+          datasets: [
+            {
+              label: "Doanh thu",
+              data: [var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12],
+              backgroundColor: "rgba(76, 175, 80, 1)",
+              borderColor: "rgba(0,0,0)",
+              borderWidth: 1,
+            },
+          ],
+        };
+        // config
+        const config = {
+          type: "bar",
+          data,
+          options: {
+            scales: {
+              x: {
+                type: "time",
+                time: {
+                  unit: "month",
+                  displayFormats: {
+                    month: "M"
+                  }
+                },
+              },
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        };
+        // render init block
+        const myChart = new Chart(document.getElementById("myChart"), config);
+</script>
+    <!--main content end-->
+    <%- include('partials/footer') %>
+</body>
+</html>
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khôi phục mật khẩu</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    
+    <div class="container">
+        <div class="my-login">
+            <div class="login-heading">
+                <h3 style="text-align: center;">Khôi phục mật khẩu</h3>
+            </div>  
+            <form action="/requestPasswordReset" method="post">
+                <div class="form-login" style="margin-top: 35px;">
+                    <%if (timeOut.length > 0){ %>
+                        <p style="font-size: 14px;font-weight:600; color: red; margin: 12.5px 0px 0px 5px;"><%= timeOut %> </p>
+                    <%}%>
+                        <p style="line-height: 25px;">Nhập Email của tài khoản đã đăng ký để nhận mã khôi phục mật khẩu</p>
+                    <div class="inputt-mail" style="margin-top: -15px;">
+                        <div class="spann" style="display: flex;">
+                            <span>Email</span>
+                            <%if (error.length > 0){ %>
+                                <p style="font-size: 14px;font-weight:600; color: red; margin: 12.5px 0px 0px 5px;"><%= error %> </p>
+                            <%}%>
+                        </div>
+
+                        <div class="inputt">
+                            <input type="text" name="email" class="box" placeholder="Email" value="<%= errorEmail %>">
+                            <input type="submit" value="Khôi phục mật khẩu" class="btn">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+     <%- include('../partials/footer') %>
+</body>
+</html>

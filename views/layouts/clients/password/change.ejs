@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đổi mật khẩu</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+
+    <div class="container">
+        <div class="change-password">
+            <div class="changepwd-heading">
+                <h3 style="text-transform: uppercase;">Thay đổi bảo mật</h3>
+                <p>Vì sự an toàn khuyến khích khách hàng sử dụng mật khẩu mạnh</p>
+            </div>
+
+            <div class="changepwd-body">
+                <form action="/saveNewPassword" class="password-change" method="post">
+                    <div class="form-changepwd">
+                        <input type="hidden" name="userid" value="<%= danhsach.userID %>">
+                        <div class="spann" style="display: flex;">
+                            <span>Mã xác nhận</span>
+                            <%if(codeError.length > 0){%>
+                                <p style="font-size: 14px; font-weight:600; color: red; margin: 12.5px 0px 0px 5px;"><%= codeError %></p>
+                            <%}%>
+                        </div>
+                            <input type="text" name="code" class="box" value="<%= codeED %>">
+                        <div class="spann" style="display: flex;">
+                            <span>Mật khẩu mới</span>
+                            <%if(passwordError.length > 0){%>
+                                <p style="font-size: 14px; font-weight:600; color: red; margin: 12.5px 0px 0px 5px;"><%= passwordError %></p>
+                            <%}%>
+                        </div>
+                            <input type="password" name="password" class="box box-inputPwd" value="<%= passwordED %>">
+                            <i class="fa-regular fa-eye-slash eyee eye-close"></i>
+                            <i class="fa-regular fa-eye eyee eye-open hidden"></i>
+                        
+                        <div class="spann" style="display: flex;">
+                            <span>Nhập lại mật khẩu mới</span>
+                        </div>
+                        <input type="password" name="password2" class="box box-inputPwdd" value="<%= password2ED %>">
+                        <i class="fa-regular fa-eye-slash eyees eye-closee"></i>
+                        <i class="fa-regular fa-eye eyees eye-openn hidden"></i>
+                        
+                        <a href="/success-changepwd">
+                            <button type="submit" class="btn">Cập nhật mật khẩu mới</button>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+     <%- include('../partials/footer') %>
+</body>
+
+<script type="text/javascript">
+    const inputPwd = document.querySelector(".box-inputPwd");
+    const eyeOpen = document.querySelector(".eye-open");
+    const eyeClose = document.querySelector(".eye-close");
+    const inputPwdd = document.querySelector(".box-inputPwdd");
+    const eyeOpenn = document.querySelector(".eye-openn");
+    const eyeClosee = document.querySelector(".eye-closee");
+
+
+    eyeOpen.addEventListener("click", function(){
+        eyeOpen.classList.add("hidden");
+        eyeClose.classList.remove("hidden");
+        inputPwd.setAttribute("type","password");
+    })
+
+    eyeClose.addEventListener("click", function(){
+        eyeOpen.classList.remove("hidden");
+        eyeClose.classList.add("hidden");
+        inputPwd.setAttribute("type","text");
+    })
+
+    eyeOpenn.addEventListener("click", function(){
+        eyeOpenn.classList.add("hidden");
+        eyeClosee.classList.remove("hidden");
+        inputPwdd.setAttribute("type","password");
+    })
+
+    eyeClosee.addEventListener("click", function(){
+        eyeOpenn.classList.remove("hidden");
+        eyeClosee.classList.add("hidden");
+        inputPwdd.setAttribute("type","text");
+    })
+
+</script>
+
+</html>

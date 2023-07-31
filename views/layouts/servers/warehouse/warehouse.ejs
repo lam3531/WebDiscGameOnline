@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Kho</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Kho</h3>
+                <%if(success.length > 0){%>
+                    <div class="alert alert-success">
+                        <%= success %>
+                    </div>
+                        <%}%>
+                <a href="/add_warehouse">
+                    <button class="btn btn-primary"><i class="fa-solid fa-plus"></i>  Nhập sản phẩm</button>
+                </a>
+                <div class="panel panel-default">
+                    <div class="table-responsive">
+                        <table id="myTable" class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center; width: 55px;">STT</th>
+                                <th style="text-align: center;" data-orderable="false">Game</th>
+                                <th style="text-align: center;" data-orderable="false">Số lượng trong kho</th>
+                                <th style="text-align: center;" data-orderable="false">Lịch sử nhập</th>
+                                <th style="text-align: center;" data-orderable="false">Lịch sử bán</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <% for(let i=0; i < danhsach.length; i++) { %>
+                            <tr>
+                                <td style="text-align: center;"><%= i+1  %></td>
+                                <td >
+                                    <% danhsach[i].productList.forEach(function(id) { %>
+                                        <%= id.productName %>
+                                        <% }); %>
+                                </td>
+                                <td style="text-align: center;"><% danhsach[i].productList.forEach(function(id) { %>
+                                    <%= danhsach[i].total - ((danhsach[i].total) - (id.productQuantity)) %>
+                                    <% }); %></td>  
+                                <td style="text-align: center">
+                                    <% danhsach[i].productList.forEach(function(id) { %>
+                                    <a href="/list_warehouse/<%= id.slug  %>" class="my_linksss" ui-toggle-class="">
+                                      <i
+                                        class="fa-solid fa-eye"
+                                        style="font-size: 25px; color: #5cb85c"
+                                      ></i>
+                                    </a>
+                                    <% }); %>
+                                </td>
+                                <td style="text-align: center">
+                                    <% danhsach[i].productList.forEach(function(id) { %>
+                                        <%if(danhsach[i].total == id.productQuantity){%>
+                                            Chưa có 
+                                            <%}else{%>
+                                                <a href="/sale_history/<%= id.slug  %>" class="my_linksss" ui-toggle-class="">
+                                                    <i
+                                                      class="fa-solid fa-eye"
+                                                      style="font-size: 25px; color: #5cb85c"
+                                                    ></i>
+                                                  </a>
+                                                <%}%>
+                                        <% }); %>
+                                </td>
+                            </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

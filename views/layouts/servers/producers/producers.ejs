@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Danh sách nhà sản xuất</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Danh sách nhà sản xuất của sản phẩm</h3>
+                <%if(success.length > 0){%>
+                    <div class="alert alert-success">
+                        <%= success %>
+                    </div>
+                    <%} else if(error.length > 0){%>
+                        <div class="alert alert-danger">
+                            <%= error %>
+                        </div>
+                        <%}%>
+                <a href="/add_producers">
+                    <button class="btn btn-primary"><i class="fa-solid fa-plus"></i>  Thêm nhà sản xuất</button>
+                </a>
+                <div class="panel panel-default">
+                    <div class="table-responsive" style="text-align: center;">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="display: none;"></th>
+                                <th style="text-align: center; width: 50px;">STT</th>
+                                <th style="text-align: center;">Tên nhà sản xuất</th>
+                                <th style="text-align: center;">Tùy biến</th>
+                            </tr>
+                            </thead>
+                                <tbody>
+                                    <% for(let i=0; i < danhsach.length; i++) { %>
+                                <tr>
+                                    <td style="display: none;"><%= danhsach[i].slug %></td>
+                                    <td style="height: 76px;"><%= i+1 %></td>
+                                    <td><%= danhsach[i].producerName %></td>
+                                    <td>
+                                        <a href="/edit_producers/<%= danhsach[i].slug %>" class="my_linkss" style="margin-right: 8px;" ui-toggle-class="">
+                                            <i class="fa-solid fa-square-pen" style="font-size: 25px; color: #5CB85C;"></i>
+                                        </a>
+                                        <a onClick="find(this);" class="js-buy-tickets my_linkss"><i class="fa-solid fa-square-xmark js-buy-tickets" style="font-size: 25px; color: #D9534F;"></i></a>
+                                    </td>
+                                </tr>
+
+                                <div class="modal js-modal">
+                                    <div class="modal-container js-modal-container">
+                                        
+                                        <header class="modal-header">
+                                            Xóa nhà sản xuất!
+                                        </header>
+                              
+                                        <div class="modal-body">
+                                            <label for="tickets-quantity" class="modal-label">
+                                                Bạn có muốn xóa nhà sản xuất này?
+                                            </label>
+                                            <div class="btn-js" style="margin-top:50px; margin-left:200px;">
+                                                <a  id="buy-tickets" style="margin-right:15px; background-color: #DC3545;"> Xóa </a>
+                                                <a id="buy-tickets" class="modal-close js-modal-close" style="background-color: #6C757D;"> Hủy </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <% } %>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <script>
+    function find( element ) {
+        let link = element.parentNode.parentNode.cells[0].innerHTML;
+        document.getElementById("buy-tickets").href = "/delete_producers/"+link;
+    }
+    </script>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

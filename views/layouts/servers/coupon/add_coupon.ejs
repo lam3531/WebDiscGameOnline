@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thêm mã giảm giá</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+            <h3>Thêm mã giảm giá</h3>
+            <div class="panel-body">
+                <div class="position-center">
+                    <form action="/coupon_save" method="post"> 
+                        <div class="form-group">
+                            <label>Giá trị</label>
+                            <input name="couponValue" type="text" class="form-control" placeholder="Giá trị">
+                            <input name="username" type="hidden" class="form-control" value="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mã giảm giá</label>
+                            <input name="couponCode" type="text" class="form-control" placeholder="Mã giảm giá">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số lượng</label>
+                            <input name="couponQuantity" type="text" class="form-control" placeholder="Số lượng">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Loại</label>
+                            <select name="couponType" class="form-control m-bot15">
+                                <option value="0">Giảm tiền</option>
+                                <option value="1">Giảm phần trăm</option>
+                                
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label >Trạng thái</label>
+                            <select name="couponStatus" class="form-control m-bot15">
+                                <option value="0">Hoạt động</option>
+                                <option value="1">Ngừng hoạt động</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ngày bắt đầu (DD/MM/YYYY)</label>
+                            <input name="start_date" type="text" class="form-control" placeholder="Ngày bắt đầu">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ngày kết thúc (DD/MM/YYYY)</label>
+                            <input name="end_date" type="text" class="form-control" placeholder="Ngày kết thúc">
+                        </div>
+
+                        <a href="/coupon"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+                        <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Thêm mới</button>
+                    </form>
+                </div>
+    
+            </div>
+        </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

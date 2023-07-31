@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Đơn hàng hôm nay</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <div class="table-heading">
+                    <div class="row">
+                        <div class="headerr">
+                            <h3>Tất cả đơn hàng hôm nay</h3>
+                        </div>
+                        <div class="body" style="display: flex; justify-content: right;">
+                            <div class="order-status">
+                                <a href="/new_orders_today" class="btn btn-newOrder btn-warning">Đơn mới (<%= orderNew %>)</a>
+                                <a href="/accept_orders_today" class="btn  btn-acceptOrder btn-warning">Đã xác nhận (<%= orderAccept %>)</a>
+                                <a href="/vroom_orders_today" class="btn btn-delivery">Đang vận chuyển (<%= orderVroom %>)</a>
+                                <a href="/done_orders_today" class="btn btn-success">Đã hoàn thành (<%= orderDone %>)</a>
+                                <a href="/cancel_orders_today" class="btn btn-danger">Đã huỷ (<%= orderCancel %>) </a>
+                                <a href="/coupon_orders_today" class="btn btn-info">Dùng coupon (<%= orderCoupon %>) </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <% if(order==0){ %>
+                        <div class="empty-table">
+                            <img src="/images/empty-order.jpg" alt="" width="250" height="250">
+                            <p>Chưa có đơn hàng</p>
+                        </div>
+                    <%}else{%>
+                    <div class="table-responsive">
+                        <table id="myTable" class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="width: 30px; text-align: center;">STT</th>
+                                <th style="text-align: center;width: 150px;" data-orderable="false">Mã đơn</th>
+                                <th style="width: 145px; text-align: center;" data-orderable="false">Người nhận</th>
+                                <th style="text-align: center;width: 90px;" data-orderable="false">SĐT</th>
+                                <th style="text-align: center;" data-orderable="false">Tổng tiền</th>
+                                <th style="text-align: center;" data-orderable="false">Ngày đặt</th>
+                                <th style="text-align: center;" data-orderable="false">Trạng thái</th>
+                                <th style="text-align: center;" data-orderable="false">Chi tiết</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <% for(let i=0; i < danhsach.length; i++) { %>
+                                <tr>
+                                    <td style="text-align: center;"><%= i+1 %></td>
+                                    <td style="text-align: center;"><%= danhsach[i].orderCode %></td>
+                                    <td style="text-align: center;"><%= danhsach[i].shippingName %></td>
+                                    <td style="text-align: center;"><%= danhsach[i].shippingPhone %></td>
+                                    <td style="text-align: center;"><%= VND.format(danhsach[i].total) %></td>
+                                    <td style="text-align: center;"><%= danhsach[i].timeIn %></td>
+                                    <td style="text-align: center;">
+                                        <% if(danhsach[i].orderStatus == 0){ %> 
+                                            <p style="color: #fbc216; font-weight: 600;">Đang chờ xác nhận</p> 
+                                        <% }else if(danhsach[i].orderStatus == 1){ %> 
+                                            <p style="color: #FAA200; font-weight: 600;">Đã xác nhận và đóng gói </p>
+                                        <% }else if(danhsach[i].orderStatus == 2){ %> 
+                                            <p style="color: #0D99FD; font-weight: 600;">Đang vận chuyển </p>    
+                                        <% }else if(danhsach[i].orderStatus == 3){ %> 
+                                            <p style="color: #449D44; font-weight: 600;">Đã nhận hàng </p> 
+                                        <% }else if(danhsach[i].orderStatus == 4){ %>
+                                            <p style="color: #D9534F; font-weight: 600;">Đã huỷ</p>
+                                        <%}%>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <a class="btn btn-primary" style="text-align: center;" href="/order_detail/<%= danhsach[i].orderCode %>">
+                                            Xem chi tiết
+                                        </a>
+                                    </td>
+                                </tr>
+                                <%}%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin tức</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    
+    <div class="container">
+        <div class="cart-p">
+            <div class="cart-heading">
+                    <h3>Tin tức</h3>
+            </div>
+            <div class="row row-cols-4">
+                <% for(let i=0; i < danhsach.length; i++) { %>
+                <div class="news-box">
+                    <div class="news-img">
+                        <a href="/news/<%= danhsach[i].slug %>" class="news-title"><img src="/images/<%= danhsach[i].productImage %>" alt="News"></a>
+                    </div>
+                    <div class="news-text">
+                        <span><%= danhsach[i].updated_date %></span>
+                        <a href="/news/<%= danhsach[i].slug %>" class="news-title"><%= danhsach[i].newsTitle %></a>
+                    </div>
+                </div>
+                <%}%>
+            </div>
+        </div>
+
+     <%- include('../partials/footer') %>
+</body>
+</html>

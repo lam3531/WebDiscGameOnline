@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin tài khoản</title>
+    <%- include('partials/head') %>
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <div class="container">
+        <div class="profile">
+            <div class="row">
+                <div class="col-3" style="margin-bottom: 80px;">
+                    <div class="side-nav">
+                        <ul class="nav-links">
+                            <li class="active" style="border-bottom: 1px solid #E6E8EB;">
+                                <a href="/profile/<%= userid %>" ><i class="fa-solid fa-user"></i>Tài khoản</a>
+                            </li>
+                            <li style="border-bottom: 1px solid #E6E8EB;">
+                                <a href="/orders/<%= userid %>"><i class="fa-solid fa-cart-shopping"></i>Lịch sử đơn hàng</a>
+                            </li>
+                            <li style="border-bottom: 1px solid #E6E8EB;">
+                                <a href="/password/<%= userid %>"><i class="fa-solid fa-user-lock"></i>Mật khẩu và bảo mật</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+    
+                <div class="col-9">
+                    <div class="account">
+                        <h3>Tổng quan</h3>
+                        <div class="row user-detail">
+                            <div class="col-3" style="text-align: center;">
+                                <p>Họ và tên</p>
+                                <p style="font-weight: 600;"><%= fullname %></p>
+                            </div>
+                            <div class="col-4" style="text-align: center;">
+                                <p>Địa chỉ email</p>
+                                <p style="font-weight: 600;"><%= email %></p>
+                            </div>
+                            <div class="col-2">
+                                <p>Số điện thoại</p>
+                                <p style="font-weight: 600;"><%= phone %></p>
+                            </div>
+                            <div class="col-3" style="border-left: 1px solid #666666;">
+                                <div class="form-group" style="text-align: center;">
+                                    <label>Avatar</label>
+                                    <div class="avatar-style">
+                                        <form id="avatarForm" action="/saveAvatar" method="post" enctype="multipart/form-data">
+                                        <img id="preview" src="/avatars/<%= avatar %>" alt="" width="120" height="120" style="border-radius: 50%;">
+                                        <span class="btn btn-primary btn-file">Chọn ảnh<input type="file" name="avatar" id="imageInput" onchange="previewImage(event)"></span><br>
+                                        <button id="removeImageButton" onclick="removeImage(event)" style="display: none; padding: 5px 18px; margin-top: 10px; margin-bottom: 10px;" class="btn btn-danger">Xoá ảnh</button><br>
+                                        <input type="hidden" name="newImageName" id="hiddenInput" value="/avatars/<%= avatar %>">
+                                        <button id="saveImageButton" class="save-img" type="submit" style="display: none;">Lưu ảnh</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+        
+            reader.onload = function() {
+                const preview = document.getElementById('preview');
+                if (file) {
+                    preview.src = reader.result;
+                } else {
+                    preview.removeAttribute('src');
+                }
+            };
+        
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        
+            const removeImageButton = document.getElementById('removeImageButton');
+            removeImageButton.style.display = file ? 'inline-block' : 'none';
+            const saveImageButton = document.getElementById('saveImageButton');
+            saveImageButton.style.display = file ? 'inline-block' : 'none';
+        }
+        
+        function removeImage() {
+        event.preventDefault();
+        const preview = document.getElementById('preview');
+        const hiddenInput = document.getElementById('hiddenInput');
+        
+        if (hiddenInput.value) {
+            // If a new file was selected but not yet saved, remove it from the input field
+            const fileInput = document.getElementById('imageInput');
+            fileInput.value = '';
+        }
+    
+        // Update the preview image with the original image source
+        preview.src = hiddenInput.value;
+    
+        const removeImageButton = document.getElementById('removeImageButton');
+        removeImageButton.style.display = 'none';
+        const saveImageButton = document.getElementById('saveImageButton');
+        saveImageButton.style.display = 'none';
+    }
+    </script>
+     <%- include('partials/footer') %>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var navLinks = document.querySelectorAll(".nav-links li a");
+
+        // Lặp qua từng mục điều hướng
+        navLinks.forEach(function(link) {
+            link.addEventListener("click", function(e) {
+                e.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+
+                // Loại bỏ lớp 'active' từ tất cả các mục điều hướng
+                navLinks.forEach(function(link) {
+                    link.parentElement.classList.remove("active");
+                });
+
+                // Thêm lớp 'active' vào mục điều hướng được nhấp vào
+                this.parentElement.classList.add("active");
+
+                // Chuyển hướng đến URL được xác định trong thuộc tính href của thẻ <a>
+                var url = this.getAttribute("href");
+                window.location.href = url;
+            });
+        });
+    });
+</script>
+</html>

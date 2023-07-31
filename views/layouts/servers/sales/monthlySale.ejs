@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Doanh thu tháng <%= convert + 1 %></title>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="table-agile-info">
+          <h3>Chi tiết doanh thu tháng <%= convert + 1 %> </h3>
+          <br>
+          <div class="panel panel-default" style="margin-top: -15px;">
+            <% if(money==0){ %>
+              <div class="sale-monthly">
+                <p>Xem doanh thu theo tháng: </p>
+                <div class="by-monthly">
+                  <select class="select-monthly" id="value" onchange="func()">
+                    <option disabled selected hidden>Chọn tháng</option>
+                    <% for (var i = 0; i < 12; i++){ %>
+                      <% if (i !== convert) { %>
+                        <option value="<%= i %>">Tháng <%= i+1 %></option>
+                      <% } else { %>
+                        <option value="<%= i %>" disabled hidden>Tháng <%= i+1 %></option>
+                      <% } %>
+                    <% } %>
+                  </select>
+                  <a href="/salesbyyears" style="margin-left: 5px;" id="link"><button class="btn btn-primary">Xem</button></a>  
+                </div>
+              </div>
+          
+              <div class="empty-table">
+                  <img src="/images/empty-order.jpg" alt="" width="250" height="250">
+                  <p>Chưa có đơn hàng</p>
+              </div>
+              <div>
+                <a href="/salesbyyears"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+              </div>
+            <%}else{%>
+              <div class="sale-monthly">
+                <p>Xem doanh thu theo tháng: </p>
+                <div class="by-monthly">
+                  <select class="select-monthly" id="value" onchange="func()">
+                    <option disabled selected hidden>Chọn tháng</option>
+                    <% for (var i = 0; i < 12; i++){ %>
+                      <% if (i !== convert) { %>
+                        <option value="<%= i %>">Tháng <%= i+1 %></option>
+                      <% } else { %>
+                        <option value="<%= i %>" disabled hidden>Tháng <%= i+1 %></option>
+                      <% } %>
+                    <% } %>
+                  </select>
+                <a href="/salesbyyears"style="margin-left: 5px;" id="link"><button class="btn btn-primary">Chọn</button></a>
+                </div>
+              </div>
+               
+            <div class="table-responsive"  style="overflow-x: hidden">
+              <table id="myTable" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="text-align: center; width: 20px">STT</th>
+                    <th style="text-align: center; width: 200px" data-orderable="false">Mã đơn hàng</th>
+                    <th style="text-align: center; width: 200px" data-orderable="false">Thời gian</th>
+                    <th style="text-align: center; width: 120px" data-orderable="false">Tổng tiền đơn hàng</th>
+                    <th style="text-align: center; width: 120px" data-orderable="false">Phí nhập sản phẩm trong đơn</th>
+                    <th style="text-align: center; width: 120px" data-orderable="false">Phí vận chuyển</th>
+                    <th style="text-align: center; width: 120px" data-orderable="false">Doanh thu</th>
+                    <th style="display: none">0</th>
+                    <th style="text-align: center; width: 190px">Chi tiết đơn hàng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <% for(let i=0; i < danhsach.length; i++) { %>
+                    <tr>
+                        <td style="text-align: center;"><%= i+1 %></td>
+                        <td style="text-align: center;"><%= danhsach[i].orderCode %></td>
+                        <td style="text-align: center;"><%= danhsach[i].timeOut %></td>
+                        <td style="text-align: center;"><%= VND.format(danhsach[i].total) %></td>
+                        <td style="text-align: center;"><%= VND.format(danhsach[i].totalPriceIn) %></td>
+                        <td style="text-align: center;"><%= VND.format(danhsach[i].shippingFee) %></td>
+                        <td style="text-align: center;"><%= VND.format(danhsach[i].revenue) %></td>
+                        <td style="display: none" id="revenue"><%= danhsach[i].revenue %></td>
+                        <td style="text-align: center;">
+                            <a href="/sales_detail/<%= danhsach[i].orderCode %>" class="active" ui-toggle-class="">
+                            <i class="fa-solid fa-eye" style="font-size: 25px; color: #5cb85c"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <%}%>
+                </tbody>
+              </table>
+              <br>
+              <div class="sales-price">
+                <b style="margin-right: 15px">Tổng doanh thu:</b>
+                <p id="all" style="color: #dc3545; font-weight: 500">
+                </p>
+              </div>
+            </div>
+            <div>
+              <a href="/salesbyyears"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </section>
+      <!--main content end-->
+    </section>
+    <%- include('../partials/footer') %>
+    <script>
+      function func() {
+        var month = document.getElementById("value").value;
+        document.getElementById("link").href = "/monthlySale/"+month;
+      }
+    </script>
+    <script>
+        const VND = new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        });
+        const tb = document.getElementById('myTable');
+        const trs = document.getElementsByTagName('tr');
+        var all = 0;
+        for(var i=0; i<trs.length; i++){
+            const revenue = document.getElementById("myTable").rows[i].cells[7].innerHTML;
+            const convert = parseInt(revenue);
+            all += convert;
+        }
+        document.getElementById("all").innerHTML = VND.format(all);      
+    </script>
+  </body>
+</html>

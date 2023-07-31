@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% for(let i=0; i < danhsach.length; i++) { %>
+    <title><%= danhsach[i].newsTitle %></title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <div class="blog-header">
+        <div class="header-content blog-container">
+            <h1 class="header-title"><%= danhsach[i].newsTitle %></h1>
+            <img src="/images/<%= danhsach[i].productImage %>" alt="" class="header-img">
+        </div>
+    </div>
+
+    <div class="blog-content blog-container">
+        <span>Bài viết được viết:</span><span> <%= danhsach[i].created_date %></span><br>
+        <span>Bài viết được cập nhật vào:</span><span> <%= danhsach[i].updated_date %></span>
+        <p class="blog-text"><%- danhsach[i].newsContent %></p>
+    </div>
+    <%}%>
+    <%- include('../partials/footer') %>
+</body>
+</html>

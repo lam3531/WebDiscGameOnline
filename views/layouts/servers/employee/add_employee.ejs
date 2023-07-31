@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thêm nhân viên mới</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Thêm nhân viên mới</h3>
+                <div class="panel-body">
+                    <div class="position-center">
+                        <form action="/admin_save" method="post">
+                            <div class="form-group">
+                                <label >Tên nhân viên</label>
+                                <%if(nameError.length > 0){%><p style="font-size: 14px;color: red;"><%= nameError %></p><%}%>
+                                <input type="text" class="form-control" name="fullname" placeholder="Tên nhân viên" value="<%= nameED %>">
+                            </div>
+                            <div class="form-group">
+                                <label >Email</label>
+                                <%if(emailError.length > 0){%><p style="font-size: 14px;color: red;"><%= emailError %></p><%}%>
+                                <%if(errorEmail.length > 0){%><p style="font-size: 14px;color: red;"><%= errorEmail %></p><%}%>
+                                <input type="text" class="form-control" name="email" placeholder="Email" value="<%= emailED %>">
+                            </div>
+                            <div class="form-group">
+                                <label >Username</label>
+                                <%if(usernameError.length > 0){%><p style="font-size: 14px;color: red;"><%= usernameError %></p><%}%>
+                                <%if(errorUsername.length > 0){%><p style="font-size: 14px;color: red;"><%= errorUsername %></p><%}%>
+                                <input type="text" class="form-control" name="username" placeholder="Username" value="<%= usernameED %>">
+                            </div>
+                            <div class="form-group">
+                                <label >Mật khẩu</label>
+                                <%if(passwordError.length > 0){%><p style="font-size: 14px;color: red;"><%= passwordError %></p><%}%>
+                                <input type="password" class="form-control" name="password" placeholder="Mật khẩu" value="<%= passwordED %>">
+                            </div>
+                            <div class="form-group">
+                                <label >Chức vụ</label>
+                                <select name="role" class="form-control m-bot15">
+                                    <option value="0">Quản lý</option>
+                                    <option value="1">Nhân viên kho</option>
+                                    <option value="2">Nhân viên đơn hàng</option>
+                                    <option value="3">Nhân viên CSKH</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label >Trạng thái</label>
+                                <select name="status" class="form-control m-bot15">
+                                    <option value="0">Kích hoạt</option>
+                                    <option value="1">Không kích hoạt</option>
+                                </select>
+                            </div>
+                            <a href="/employees"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+                            <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Thêm mới</button>
+                        </form>
+                    </div>
+        
+                </div>
+            </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

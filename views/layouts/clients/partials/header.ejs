@@ -1,0 +1,140 @@
+<header id="header">
+    <div class="head_link">
+        <a href="/">
+            <img src="/images/gamingstore-logoo.png" alt="LogoImage">
+        </a>
+        <form method="get" action="/search" class="search-form">
+            <input name="kw" type="text" placeholder="Tìm kiếm sản phẩm...">
+            <button class="btn" type="submit">
+                <i class="bi bi-search" style="color: white"></i>
+            </button>
+        </form>
+        <div class="icon">
+            <% if(userid == 1) {%>
+            <img src="/images/<%= avatar %>" alt="UserImage" onclick="toggleMenu()">
+                <% }else { %>
+                    <img src="/avatars/<%= avatar %>" alt="UserImage" style="border-radius: 50%;" onclick="toggleMenu()">
+                    <% } %>
+            <% if(userid == 1) {%>
+                <a href="/login"> Đăng nhập </a>
+                <% }else { %>
+                    <a href="/profile/<%= userid %>">
+                    <p> <%= fullname %> </p>
+                    </a>
+                <% } %>
+            <div class="sub-menu-wrap" id="subMenu">
+                    <div class="sub-menu">
+                        <% if(userid == 1) {%>
+                        <a href="/login" class="sub-menu-link">
+                            <p>Quản lý tài khoản</p>
+                        </a>
+                        <% }else{ %>
+                            <a href="/profile/<%= userid %>" class="sub-menu-link">
+                                <p>Quản lý tài khoản</p>
+                            </a>
+                            <% } %>
+
+                        <% if(userid == 1) {%>
+                        <a href="/login" class="sub-menu-link">
+                            <p>Lịch sử đơn hàng</p>
+                        </a>
+                        <% }else{ %>
+                            <a href="/orders/<%= userid %>" class="sub-menu-link">
+                                <p>Lịch sử đơn hàng</p>
+                            </a>
+                            <% } %>
+                        
+                        <% if(userid == 1) {%>
+                        <a href="/login" class="sub-menu-link">
+                                    <p>Mật khẩu</p>
+                                </a>
+                                <% }else{ %>
+                                    <a href="/password/<%= userid %>" class="sub-menu-link">
+                                        <p>Mật khẩu</p>
+                                    </a>
+                                    <% } %>
+                             
+                                    
+                                    <% if(userid == 1) {%>
+                                        <a href="/" class="sub-menu-link">
+                                                    <p>Đăng xuất</p>
+                                                </a>
+                                                <% }else{ %>
+                                                    <a href="/logout" class="sub-menu-link">
+                                                        <p>Đăng xuất</p>
+                                                    </a>
+                                                    <% } %>            
+                    </div>
+                </div>
+                <div class="cart-icon">
+                    <% if(userid==1){ %>
+                        <a class="cart" href="/login">
+                            <img src="/images/shopping-cart.png" alt="UserImage">
+                            Giỏ hàng 
+                            </a>
+                        <% }else { %>
+                    <a class="cart" href="/cart/<%= userid %>" id="count">
+                    <img src="/images/shopping-cart.png" alt="UserImage">
+                    Giỏ hàng
+                    <div class="quantity-cart"><%if(cart[0]){%> <%cart.forEach(function(id){%> <%= id.item_count %> <%});%> <%}else{%> 0 <%}%></div>
+                    </a>
+                    <% } %>
+                </div>
+        </div>
+    </div>
+
+    <div class="head_menu">
+        <div class="row">
+            <div class="col">
+                <div class="dropdown_menu">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="/images/category (1).png" alt="UserImage" style="width: 30px;height: 30px;">
+                        Danh mục sản phẩm
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="/all_product">Tất cả sản phẩm</a></li>
+                            <li>
+                                <a class="dropdown-item">Danh mục NSX <i class="fa-solid fa-chevron-right" style="margin-left: 70px;"></i></a>
+                                <ul class="dropdown-menu submenu" style="border-radius: 0px;">
+                                    <li><a class="dropdown-item" href="/producer/ps4">PS4</a></li>
+                                    <li><a class="dropdown-item" href="/producer/ps5">PS5</a></li>
+                                    <li><a class="dropdown-item" href="/producer/nintendo">Nintendo</a></li>
+                                    <li><a class="dropdown-item" href="/producer/xbox">Xbox</a></li>
+                               </ul>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/category/hanh-dong">Hành Động</a></li>
+                            <li><a class="dropdown-item" href="/category/the-thao">Thể thao</a>
+                            <li><a class="dropdown-item" href="/category/mo-phong">Mô Phỏng</a></li>
+                            <li><a class="dropdown-item" href="/category/chien-thuat">Chiến Thuật</a></li>
+                            <li><a class="dropdown-item" href="/category/phieu-luu">Phiêu lưu</a></li>
+                            <li><a class="dropdown-item" href="/category/nhap-vai">Nhập vai</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="icon-menu">
+                    <a class="introduction" href="/about">
+                        <img src="/images/introduction.png" alt="UserImage">
+                        Giới thiệu
+                    </a>
+                    <a class="news" href="/news">
+                        <img src="/images/newspaper.png" alt="UserImage">
+                        Tin tức
+                    </a>
+                    <a class="Hiring" href="/hiring">
+                        <img src="/images/hiring.png" alt="UserImage">
+                        Tuyển dụng
+                    </a>
+                    <a class="support" href="/support">
+                        <img src="/images/headphones.png" alt="UserImage">
+                        Hỗ trợ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>

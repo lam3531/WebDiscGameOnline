@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Danh sách tin tức</title>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="table-agile-info">
+          <h3>Danh sách tin tức</h3>
+          <%if(success.length > 0){%>
+            <div class="alert alert-success">
+                <%= success %>
+            </div>
+            <%} else if(error.length > 0){%>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+                <%}%>
+          <a href="/add_news">
+            <button class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i> Nhập tin tức mới
+            </button>
+          </a>
+          <div class="panel panel-default">
+            <div class="table-responsive">
+              <table id="myTable" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 50px">STT</th>
+                    <th style="text-align: center; width: 240px" data-orderable="false">Tiêu đề</th>
+                    <th style="text-align: center; width: 80px" data-orderable="false">Hình ảnh</th>
+                    <th style="text-align: center; width: 220px" data-orderable="false">Nội dung</th>
+                    <th style="text-align: center; width: 180px" data-orderable="false">Trạng thái</th>
+                    <th style="text-align: center; width: 170px" data-orderable="false">Tùy biến</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(let i=0; i < danhsach.length; i++) { %>
+                  <tr>
+                    <td style="text-align: center"><%= i+1 %></td>
+                    <td><%= danhsach[i].newsTitle %></td>
+                    <td>
+                      <img
+                        src="/images/<%= danhsach[i].productImage %>"
+                        width="80"
+                        height="80"
+                        alt=""
+                      />
+                    </td>
+                    <td
+                      style="
+                        display: block;
+                        display: -webkit-box;
+                        line-height: 100px;
+                        width: 380px;
+                        height: 100px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 3;
+                        -webkit-box-orient: vertical;
+                      "
+                    >
+                      <%- danhsach[i].newsContent %>
+                    </td>
+
+
+                    <td style="text-align: center">
+                      <% if(danhsach[i].newsStatus == 0){ %> 
+                        Mới 
+                      <% }else if(danhsach[i].newsStatus == 1){ %> Cũ <% } else { %> Tắt <%
+                      } %>
+                    </td>
+
+                    <td style="text-align: center">
+                      <a href="/edit_news/<%= danhsach[i].slug %>" class="my_links" ui-toggle-class="">
+                        <i
+                          class="fa-solid fa-square-pen"
+                          style="font-size: 25px; color: #5cb85c"
+                        ></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--main content end-->
+    </section>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

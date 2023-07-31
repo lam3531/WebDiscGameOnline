@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Danh sách khách hàng</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Danh sách khách hàng</h3>
+                <div class="panel panel-default">
+                    <div class="table-responsive" style="margin-top: 15px;">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="width: 30px;">STT</th>
+                                <th>Tên khách hàng</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                            </tr>
+                            </thead>
+                                <tbody>
+                                    <% for(let i=0; i < nhanvat.length; i++) { %>
+                                <tr>
+                                    <td style="text-align: center;"><%= i+1 %></td>
+                                    <td><%= nhanvat[i].fullname %></td>
+                                    <td><%= nhanvat[i].email %></td>
+                                    <td><%= nhanvat[i].phone %></td>    
+                                </tr>
+                                <% } %>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm kiếm</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm kiếm</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <div class="container">
+        <div class="cart-p">
+            <div class="cart-heading">
+                <h3>Kết quả tìm kiếm cho từ khoá: <b style="color: black;">"<%= kw %>"</b></h3>
+            </div>
+            <% if (danhsach.length> 0){ %>
+            <div class="filter-catergory">
+                <p>Lọc sản phẩm theo: </p>
+                <div class="by-category">
+                    <label for=""><b>Thể Loại</b></label>
+                    <select class="select-category" id="selectCategory" onchange="sortingCategory()">
+                        <option>Mặc định</option>
+                        <option>Hành động</option>
+                        <option>Thể thao</option>
+                        <option>Mô phỏng</option>
+                        <option>Chiến thuật</option>
+                        <option>Phiêu lưu</option>
+                        <option>Nhập vai</option>
+                    </select>
+                </div>
+                <div class="by-producer">
+                    <label for=""><b>Nhà Sản Xuất</b></label>
+                    <select class="select-producer" id="selectProducer" onchange="sortingProducer()">
+                        <option>Mặc định</option>
+                        <option>PS5</option>
+                        <option>PS4</option>
+                        <option>Nintendo</option>
+                        <option>Xbox</option>
+                    </select>
+                </div>
+                <div class="by-price">
+                    <label for=""><b>Giá tiền</b></label>
+                    <select class="select-price" id="selectPrice" onchange="sortingValue()">
+                        <option value="Default">Mặc định</option>
+                        <option value="LowToHigh">Tăng dần</option>
+                        <option value="HighToLow">Giảm dần</option>
+                    </select>
+                </div>
+            </div>
+            <p style="display: none;" id="length"><%= danhsach.length %></p>
+            <div class="row row-cols-4 items">
+                <% for(let i=0; i < danhsach.length; i++) { %>
+                    <div class="col-product" data-price="<%= danhsach[i].priceOut %>" data-category="<%= danhsach[i].categoryName %>" 
+                        data-producer="<%= danhsach[i].producerName %>">
+                        <div class="sp-box">
+                            <a href="/product/<%= danhsach[i].slug %>">
+                                <img src="/images/<%= danhsach[i].productImage %>" style="text-align: center" height="300px" width="100px" alt="">
+                                <div class="p-title">
+                                    <p><%= danhsach[i].productName %></p>
+                                </div>
+                                <div class="price">
+                                    <p><%= VND.format(danhsach[i].priceOut) %></p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                <% } %>  
+            </div>
+            <% } else { %>
+                <div class="cart-table">
+                    <p style="font-size: 18px; font-weight:500">KHÔNG CÓ KẾT QUẢ TÌM KIẾM!!</p>
+                  </div> 
+                <div class="container" style="display:flex; justify-content:center;">
+                    <div class="cart-table-img">
+                      <img src="/images/error-found.png" style="width: 300px;" alt="">
+                    </div>
+                </div>
+            <% } %>
+        </div>
+        </div>
+<script>
+let field = document.querySelector(".items");
+let products = Array.from(field.querySelectorAll(".col-product"));
+let length = document.getElementById("length").innerHTML;
+let selectPrice = document.getElementById("selectPrice");
+let categorySelect = document.getElementById("selectCategory");
+let producerSelect = document.getElementById("selectProducer");
+
+
+let prices = [];
+for (let i = 0; i < length; i++) {
+    let price = products[i].getAttribute("data-price");
+    prices.push(price);
+}
+for (let i = 0; i < length; i++) {
+    products[i].setAttribute("data-price", prices[i]);
+}
+
+function filterByProducer(products, selectedProducer) {
+    return products.filter((product) => {
+        return selectedProducer === 'Mặc định' || product.getAttribute('data-producer') === selectedProducer;
+    });
+}
+
+function filterByCategory(products, selectedCategory) {
+  return products.filter(product => {
+    const categories = product.getAttribute('data-category').split(', ');
+    return selectedCategory === 'Mặc định' || categories.includes(selectedCategory);
+  });
+}
+
+function sortProductsByTitle(products, asc) {
+    let dm = asc ? 1 : -1;
+    return products.sort((a, b) => {
+        const titleA = a.querySelector('.p-title p').innerText.toUpperCase();
+        const titleB = b.querySelector('.p-title p').innerText.toUpperCase();
+        return titleA.localeCompare(titleB) * dm;
+    });
+}
+
+function sortProductsByPrice(products, asc) {
+    let dm = asc ? -1 : 1;
+    return products.sort((a, b) => {
+        const priceA = Number(a.getAttribute('data-price'));
+        const priceB = Number(b.getAttribute('data-price'));
+        return (priceA - priceB) * dm;
+    });
+}
+
+function updateProductsDisplay(products) {
+    while (field.firstChild) {
+        field.removeChild(field.firstChild);
+    }
+    field.append(...products);
+}
+
+function sortingValue() {
+    let selectedProducer = producerSelect.value;
+    let selectedCategory = categorySelect.value;
+    let filteredProducts = filterByProducer(products, selectedProducer);
+    filteredProducts = filterByCategory(filteredProducts, selectedCategory);
+    if (selectPrice.value == 'Default') {
+        filteredProducts = sortProductsByTitle(filteredProducts, true);
+    } else if (selectPrice.value == 'HighToLow') {
+        filteredProducts = sortProductsByPrice(filteredProducts, true);
+    } else if (selectPrice.value == 'LowToHigh') {
+        filteredProducts = sortProductsByPrice(filteredProducts, false);
+    }
+    updateProductsDisplay(filteredProducts);
+}
+
+function sortingProducer() {
+    let selectedProducer = producerSelect.value;
+    let selectedCategory = categorySelect.value;
+    let filteredProducts = filterByProducer(products, selectedProducer);
+    filteredProducts = filterByCategory(filteredProducts, selectedCategory);
+    let sortedProducts = sortProductsByTitle(filteredProducts, true);
+    if (selectPrice.value == 'HighToLow') {
+        sortedProducts = sortProductsByPrice(filteredProducts, true);
+    } else if (selectPrice.value == 'LowToHigh') {
+        sortedProducts = sortProductsByPrice(filteredProducts, false);
+    }
+    updateProductsDisplay(sortedProducts);
+}
+
+function sortingCategory() {
+    const selectedProducer = producerSelect.value;
+    const selectedCategory = categorySelect.value;
+    let filteredProducts = filterByCategory(products, selectedCategory);
+    filteredProducts = filterByProducer(filteredProducts, selectedProducer);
+    let sortedProducts = sortProductsByTitle(filteredProducts, true);
+    if (selectPrice.value == 'HighToLow') {
+        sortedProducts = sortProductsByPrice(filteredProducts, true);
+    } else if (selectPrice.value == 'LowToHigh') {
+        sortedProducts = sortProductsByPrice(filteredProducts, false);
+    }
+    updateProductsDisplay(sortedProducts);
+}
+</script>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title><%= prname %></title>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <div class="table-agile-info">
+
+            <div class="pr-heading">
+                <h3>Chi tiết sản phẩm</h3>
+            </div>
+
+            <div class="pr-body">
+                <div class="pr-name">
+                    <div class="row">
+                        <div class="col-3" style="">
+                            <p>Tên sản phẩm: </p>
+                        </div>
+
+                        <div class="col-9">
+                            <b><%= danhsach.productName %></b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pr-img">
+                    <div class="row">
+                        <div class="col-3">
+                            <p style="margin-top: 35px;">Hình ảnh: </p>
+                        </div>
+                        <div class="col-9">
+                            <img src="/images/<%= danhsach.productImage %>" style="text-align: center" height="120" width="100px" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pr-category">
+                    <div class="row">
+                        <div class="col-3">
+                            <p>Thể loại: </p>
+                        </div>
+                        <div class="col-9">
+                            <% danhsach.categoryID.forEach(function(id){ %>
+                                <b><%= id.categoryName %> </b>
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pr-producer">
+                    <div class="row">
+                        <div class="col-3">
+                            <p>Nhà sản xuất: </p>
+                        </div>
+                        <div class="col-9">
+                            <b><%= danhsach.producerID.producerName %> </b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pr-nhap">
+                    <div class="row">
+                        <div class="col-3">
+                            <p>Giá nhập sản phẩm: </p>
+                        </div>
+                        <div class="col-9">
+                            <b style="color: blue;"><%= VND.format(danhsach.priceIn) %> </b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pr-ban">
+                    <div class="row">
+                        <div class="col-3">
+                            <p>Giá bán sản phẩm: </p>
+                        </div>
+                        <div class="col-9">
+                            <b style="color: red;"><%= VND.format(danhsach.priceOut) %> </b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pr-status">
+                    <div class="row">
+                        <div class="col-3">
+                            <p>Trạng thái sản phẩm: </p>
+                        </div>
+
+                        <div class="col-9">
+                                <% if(danhsach.productStatus == 0){ %> 
+                                    Nổi bật 
+                                  <% }else if(danhsach.productStatus == 1){ %> Mới <% } else { %> Tắt <%
+                                } %>
+                            </b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pr-detail">
+                    <div class="row">
+                        <div class="col-3"><p>Mô tả sản phẩm: </p></div>
+                        <div class="col-9"><p><%- danhsach.productDescription %></p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pr-footer">
+                <a href="/admin_product"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+            </div>
+    
+        </div>
+      </section>
+      <!--main content end-->
+    </section>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    
+    <div class="container">
+        <div class="profile">
+            <div class="row">
+                <div class="col-3">
+                    <div class="side-nav" style="margin-bottom: 85px">
+                        <ul class="nav-links">
+                            <li style="border-bottom: 1px solid #E6E8EB;">
+                                <a href="/profile/<%= userid %>"  ><i class="fa-solid fa-user"></i>Tài khoản</a>
+                            </li>
+                            <li style="border-bottom: 1px solid #E6E8EB;">
+                                <a href="/orders/<%= userid %>"><i class="fa-solid fa-cart-shopping"></i>Lịch sử đơn hàng</a>
+                            </li>
+                            <li style="border-bottom: 1px solid #E6E8EB;">
+                                <a href="/password/<%= userid %>"><i class="fa-solid fa-user-lock"></i>Mật khẩu và bảo mật</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+    
+                <div class="col-9">
+                    <div class="orders">
+                        
+                        <div class="order-heading">
+                            <h3>Chi tiết đơn hàng</h3>
+                            <p><b>Mã đơn hàng:</b> <%= danhsach.orderCode %> </p>
+                            <p><b>Địa chỉ nhận hàng:</b> <%= danhsach.shippingAddress %>&#44;&nbsp;<%= danhsach.shippingWard %>&#44;&nbsp;<%= danhsach.shippingDistrict %>&#44;&nbsp;<%= danhsach.shippingCity %></p>
+                            <p><b>Hình thức thanh toán:</b> <%= danhsach.paymentMethod %> </p>
+                            <p><b>Mã giảm giá:</b> <%= danhsach.couponCode%> </p>
+                            <p><b>Ngày đặt:</b> <%= danhsach.timeIn %> </p>
+                            <% if(danhsach.timeOut){ %>
+                                <p><b>Ngày nhận: </b><%= danhsach.timeOut %></p>
+                            <% } %>
+                            <p><b>Tình trạng:</b> <% if(danhsach.orderStatus == 0){ %> Đang chờ xác nhận <% }else
+                                if(danhsach.orderStatus == 1){ %> Đã xác nhận và đóng gói <% }else if(danhsach.orderStatus ==
+                                2){ %> Đang vận chuyển <% }else if(danhsach.orderStatus == 3){ %> Đã nhận hàng <% }else if(danhsach.orderStatus == 4){ %>Đã huỷ<%}%> </p>
+                            <% if(danhsach.cancelReason){ %>
+                                <p><b>Lý do huỷ đơn: </b><%= danhsach.cancelReason %></p>
+                            <% } %>
+                            <% if(danhsach.cancelFrom){ %>
+                                <p><b>Huỷ bởi: </b><%= danhsach.cancelFrom %></p>
+                            <% } %>
+                        </div>
+                        <div class=orders-table>
+                            <table class="table table-bordered table-hover table-striped" style="text-align: center; vertical-align: middle;">
+                                <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Giá tiền</th>
+                                    <th>Số lượng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <% danhsach.items.forEach(function(id) { %>
+                                    <tr>
+                                        <td><a href="/product/<%= id.productID._id %>" style="text-decoration: none; color: black;"><%= id.productID.productName %></a></td>
+                                        <td><a href="/product/<%= id.productID._id %>" style="text-decoration: none; color: black;"><img src="/images/<%= id.productID.productImage %>" style="width:50px; height: 80px;" alt=""></a></td>
+                                        <td><%= VND.format(id.productID.priceOut) %></td>
+                                        <td><%= id.quantity %></td>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="total-price">
+                            <table>
+    
+                                <tr>
+                                    <td style="font-weight: bold; padding-right: 50px; padding-bottom: 10px;">Tổng giá sản phẩm: </td>
+                                    <td style="padding-right: 50px;padding-bottom: 10px;"><%= VND.format(money) %></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; padding-right: 50px; padding-bottom: 10px;">Phí vận chuyển:</td>
+                                    <td style="text-align:right; padding-right: 50px;padding-bottom: 10px;"><%= VND.format(danhsach.shippingFee) %></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; padding-right: 50px; padding-bottom: 10px;">Giảm giá:</td>
+                                    <td style="text-align:right; padding-right: 50px; padding-bottom: 10px;"><%if(couponType==0){%>
+                                        - <%= VND.format(couponValue*1000) %>
+                                        <%}else if(couponType==1){%>
+                                            - <%= couponValue %>%
+                                            <%}%>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold; padding-right: 50px; padding-bottom: 10px;">Tổng thành tiền:</td>
+                                    <td style="padding-right: 50px;padding-bottom: 10px;"><%= VND.format(danhsach.total) %></td>
+                                </tr>
+    
+                            </table>
+                        </div>
+                        <div class="orderDetails-btn">
+                                    <a href="/orders/<%= userid %>">
+                                        <button class="btn btn-primary btn-back" style="width: 120px; font-size: 25px; font-weight: 500; margin-right: 15px;">Quay lại</button>
+                                    </a>
+                           
+                                <%if(danhsach.orderStatus == 2){%>
+                                        <form action="/get_order/<%= danhsach.orderCode %>" method="post">
+                                            <button class="btn btn-success" style="width: 220px; font-size: 25px; font-weight: 500; margin-right: 15px;"><b>Nhận đơn hàng</b></button>
+                                        </form>
+                                <%}%>
+                                <%if(limit!=0 && danhsach.orderStatus == 0){%>
+                                        
+                                    <button class="btn btn-secondary btn-cancel btn-danger js-buy-tickets" style="font-size: 25px; font-weight: 500;">Huỷ đơn hàng</button>
+                                        
+                                <%}%>
+
+                                <div class="modal js-modal">
+                                    <div class="modal-container js-modal-container">
+                                        
+                                        <header class="modal-header">
+                                            Bạn muốn hủy đơn hàng?
+                                        </header>
+                              
+                                        <div class="modal-body">
+                                            <label for="tickets-quantity" class="modal-label">
+                                                Lý do hủy đơn hàng: <span style="color: red;">*</span> <% if(formError.length > 0){ %> <p style="color: red;"><%= formError %></p> <% } %>
+                                            </label>
+                                            <input form="cancelOrder" type="text" class="text-cancel" name="cancelReason"></input>
+                                            <div class="btn-js">
+                                                <form action="/cancel_order/<%= danhsach.orderCode %>" method="post" id="cancelOrder">
+                                                    <button form="cancelOrder" class="btn btn-danger btn-error" style="width: 100px; font-size: 18px; font-weight: 500; margin-right: 15px; border-radius: 10px;">Hủy đơn</button>
+                                                </form>
+                                                <a id="buy-tickets" class="modal-close js-modal-close" style="background-color: #6C757D;"> Thoát </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <%- include('../partials/footer') %>
+</body>
+</html>

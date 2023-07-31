@@ -1,0 +1,41 @@
+{
+  "name": "project3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Lam & Phong",
+  "license": "ISC",
+  "dependencies": {
+    "@selectize/selectize": "^0.15.2",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "collect.js": "^4.36.1",
+    "connect-flash": "^0.1.1",
+    "cors": "^2.8.5",
+    "csvtojson": "^2.0.10",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.17.3",
+    "moment-timezone": "^0.5.43",
+    "mongoclient": "^1.0.3",
+    "mongoose": "^7.1.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.2",
+    "nodemailer": "^6.9.3",
+    "nodemon": "^2.0.22",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^8.0.0",
+    "path": "^0.12.7",
+    "slugify": "^1.6.6",
+    "socket.io": "^4.7.1",
+    "sweetalert2": "^11.7.12",
+    "uuid": "^9.0.0"
+  }
+}

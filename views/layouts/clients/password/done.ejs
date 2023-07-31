@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khôi phục mật khẩu</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <%- include('../partials/header') %>
+    
+    <div class="container">
+        <div class="my-login">
+            <div class="login-heading">
+                <h3 style="text-align: center;">Khôi phục mật khẩu</h3>
+            </div>  
+            <form action="/requestPasswordReset" method="post">
+                <div class="form-login">
+                    <div class="spann" style="display: flex;">
+                    <p style="font-size: 14px;font-weight:600; color: green; margin: 12.5px 0px 0px 5px;">Đường dẫn đã được gửi tới Email của bạn. Vui lòng kiểm tra mục "Spam" nếu không thấy! </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+     <%- include('../partials/footer') %>
+</body>
+</html>

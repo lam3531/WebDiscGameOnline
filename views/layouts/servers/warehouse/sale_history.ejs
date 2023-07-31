@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lịch sử bán</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3 style="margin-bottom: 15px;">Lịch sử bán</h3>
+                <div class="panel panel-default">
+                    <div class="table-responsive">
+                        <p><b>Game:</b> <%= name %></p>
+                        <table id="myTable" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center; width: 45px;">STT</th>
+                                <th style="text-align: center;">Đơn hàng</th>
+                                <th style="text-align: center;">Số lượng bán ra</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% for(let i=0; i < danhsach.length; i++) { %>
+                                <% danhsach[i].items.forEach(function(id) { %>
+                            <tr>
+                                <td style="text-align: center;"><%= i+1 %></td>
+                                <td style="text-align: center;"><%= order[i] %></td>
+                                <td style="text-align: center;"><%= id.quantity %></td>
+                            </tr>
+                                <% }); %>
+                            <%}%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <div class="sales-price">
+                      <b style="margin-right: 10px">Tổng:</b>
+                      <p style="color: #dc3545; font-weight: 500">
+                        <%= money %>&nbsp;
+                      </p>
+                       sản phẩm
+                    </div>
+                    <a href="/warehouse"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+                </div>
+            </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

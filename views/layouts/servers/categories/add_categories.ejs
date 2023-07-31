@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thêm thể loại</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+            <h3>Thêm thể loại</h3>
+            <div class="panel-body">
+                <div class="position-center">
+                    <form action="/categories_save" method="post"> 
+                        <div class="form-group">
+                            <label>Tên thể loại</label>
+                            <input name="categoryName" type="text" class="form-control" placeholder="Tên thể loại">
+                            <input name="username" type="hidden" class="form-control" value="0">
+                        </div>
+                        <a href="/admin_categories"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+                        <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Thêm thể loại mới</button>
+                    </form>
+                </div>
+    
+            </div>
+        </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+</html>
+

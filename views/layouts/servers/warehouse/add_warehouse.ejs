@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Nhập kho</title>
+    <%- include('../partials/head') %>
+</head>
+<body>
+    <!--sidebar start-->
+    <%- include('../partials/sidebar') %>
+    <!-- sidebar end -->
+
+    <!--main content start-->
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="table-agile-info">
+                <h3>Nhập kho</h3>
+                <div class="panel panel-default">
+                    <div class="table-responsive">
+                        <input form="form" type="button" class="btn btn-primary" value="Thêm dòng" onclick="btnADD()" style="margin-top: 15px; margin-bottom: 15px;">
+                        <table class="table table-bordered" style="border: 1px solid #DDDDDD;">
+                            <thead>
+                                <tr>    
+                                    <th style="text-align: center; width: 450px;">Game</th>
+                                    <th style="text-align: center;">Số lượng nhập</th>
+                                    <th style="text-align: center; width: 100px;">Tùy biến</th>
+                                </tr>
+                            </thead>
+                            <%if(emptyError.length > 0){%><p style="font-size: 14px;color: red;"><%= emptyError %></p><%}%>
+                            <%if(quantityError.length > 0){%><p style="font-size: 14px;color: red;"><%= quantityError %></p><%}%>
+                            <tbody id="TBody">
+                                <tr id="TRow">
+                                    <td>
+                                        <select form="form" name="productID" class="form-control m-bot15">
+                                            <% for(let i=0; i < danhsach.length; i++) { %>
+                                                <option value="<%= danhsach[i].id %>"><%= danhsach[i].productName %></option>
+                                            <% } %>
+                                        </select>
+                                    </td>
+                                    <td><input form="form" name="quantityIn" type="text" class="form-control" placeholder="Nhập số lượng" value="<%= quantityED %>"></td>
+                                    <td style="text-align: center;"><button class="btn btn-danger" onclick="btnDEL(this)">Xóa dòng</button></td>    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="/warehouse"><button type="button" class="btn btn-info" ><i class="fa-solid fa-arrow-left-long"></i> Quay lại</button></a>
+                    <button form="form" type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Nhập mới</button>
+                    <form action="/save_warehouse" method="post" id="form"></form>
+                </div>
+            </div>
+        </section>
+    <!--main content end-->
+
+</section>
+    <%- include('../partials/footer') %>
+</body>
+
+<script>
+    function btnADD() {
+        var v = $("#TRow").clone().appendTo("TBody");
+        $(v).find("input").val('');
+    }
+
+    function btnDEL(v) {
+        $(v).parent().parent().remove();
+    }
+</script>
+</html>  
+
